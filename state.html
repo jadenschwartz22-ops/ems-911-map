@@ -43,6 +43,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
     <a href="state.html?s=ut">UT</a>
     <a href="state.html?s=in">IN</a>
     <a href="state.html?s=ky">KY</a>
+    <a href="state.html?s=ne">NE</a>
+    <a href="state.html?s=or">OR</a>
+    <a href="state.html?s=vt">VT</a>
+    <a href="state.html?s=ks">KS</a>
+    <a href="state.html?s=me">ME</a>
+    <a href="state.html?s=wa">WA</a>
+    <a href="state.html?s=ok">OK</a>
+    <a href="state.html?s=mo">MO</a>
+    <a href="state.html?s=wi">WI</a>
+    <a href="state.html?s=az">AZ</a>
+    <a href="state.html?s=id">ID</a>
     <a href="contribute.html" style="color:#e67e22">Fix</a>
   </div>
   <div class="search-bar"><input type="text" id="search" placeholder="Search agency name..."></div>
@@ -79,6 +90,83 @@ const STATES = {
     nameField: 'DsplayName', features: 415, agencies: 211,
     source: 'KyGeoNet / Kentucky 911', authoritative: true,
     notes: 'NG911 EMS Emergency Service Boundaries.',
+  },
+  ne: {
+    name: 'Nebraska', center: [41.5, -99.8], zoom: 7,
+    emsFile: 'data/ne-ems-simple.geojson', stateFile: 'data/ne-state-simple.geojson',
+    nameField: 'DsplayName', features: 977, agencies: 505,
+    source: 'NE Public Service Commission / NG911', authoritative: true,
+    notes: 'Rescue district response areas. NG911 official data.',
+  },
+  or: {
+    name: 'Oregon', center: [44.0, -120.5], zoom: 7,
+    emsFile: 'data/or-ems-simple.geojson', stateFile: 'data/or-state-simple.geojson',
+    nameField: 'name', features: 125, agencies: 100,
+    source: 'OR Dept of Human Services / OHA', authoritative: true,
+    notes: 'Oregon Ambulance Service Areas. County ASPs required by state law.',
+  },
+  vt: {
+    name: 'Vermont', center: [44.0, -72.7], zoom: 8,
+    emsFile: 'data/vt-ems-simple.geojson', stateFile: 'data/vt-state-simple.geojson',
+    nameField: 'Serv_Name', features: 67, agencies: 67,
+    source: 'Vermont Center for Geographic Information (VCGI)', authoritative: true,
+    notes: 'Ambulance service areas with cert level and coverage towns.',
+  },
+  ks: {
+    name: 'Kansas', center: [38.5, -98.0], zoom: 7,
+    emsFile: 'data/ks-ems-simple.geojson', stateFile: 'data/ks-state-simple.geojson',
+    nameField: 'name', features: 362, agencies: 301,
+    source: 'Kansas NG911 ESB', authoritative: true,
+    notes: 'NG911 Emergency Service Boundaries filtered to EMS.',
+  },
+  me: {
+    name: 'Maine', center: [45.3, -69.0], zoom: 7,
+    emsFile: 'data/me-ems-simple.geojson', stateFile: 'data/me-state-simple.geojson',
+    nameField: 'name', features: 256, agencies: 245,
+    source: 'Maine E911 / Emergency Services Communication Bureau', authoritative: true,
+    notes: 'EMS zones from Maine E911 system. NG911 official.',
+  },
+  wa: {
+    name: 'Washington', center: [47.4, -120.7], zoom: 7,
+    emsFile: 'data/wa-ems-simple.geojson', stateFile: 'data/wa-state-simple.geojson',
+    nameField: 'name', features: 1821, agencies: 481,
+    source: 'WA Military Dept / Emergency Management Division', authoritative: true,
+    notes: 'Emergency response boundaries extracted from WA E911 system.',
+  },
+  ok: {
+    name: 'Oklahoma', center: [35.5, -97.5], zoom: 7,
+    emsFile: 'data/ok-ems-simple.geojson', stateFile: 'data/ok-state-simple.geojson',
+    nameField: 'name', features: 83, agencies: 68,
+    source: 'OK Tax Commission / Ad Valorem Division', authoritative: true,
+    notes: 'EMS district boundaries.',
+  },
+  mo: {
+    name: 'Missouri', center: [38.6, -92.6], zoom: 7,
+    emsFile: 'data/mo-ems-simple.geojson', stateFile: 'data/mo-state-simple.geojson',
+    nameField: 'name', features: 767, agencies: 90,
+    source: 'MO State Emergency Management Agency (MOSEMA)', authoritative: true,
+    notes: 'Missouri ambulance boundary data.',
+  },
+  wi: {
+    name: 'Wisconsin', center: [44.5, -89.8], zoom: 7,
+    emsFile: 'data/wi-ems-simple.geojson', stateFile: 'data/wi-state-simple.geojson',
+    nameField: 'name', features: 2384, agencies: 514,
+    source: 'WI Office of Emergency Communications / NG911', authoritative: true,
+    notes: 'NG911 GIS service polygons. Most granular state dataset.',
+  },
+  az: {
+    name: 'Arizona', center: [34.3, -111.7], zoom: 7,
+    emsFile: 'data/az-ems-simple.geojson', stateFile: 'data/az-state-simple.geojson',
+    nameField: 'name', features: 197, agencies: 178,
+    source: 'AZ 911 Program / AZGEO', authoritative: true,
+    notes: 'NG911 EMS boundaries from county 911 coordinators.',
+  },
+  id: {
+    name: 'Idaho', center: [44.4, -114.7], zoom: 7,
+    emsFile: 'data/id-ems-simple.geojson', stateFile: 'data/id-state-simple.geojson',
+    nameField: 'NAME', features: 300, agencies: 14,
+    source: 'ID Dept of Health & Welfare / State EMS Bureau', authoritative: false,
+    notes: 'Partial county EMS coverage areas.',
   },
 };
 
