@@ -18,3 +18,4 @@ data/denver-metro.json
 data/co-place-county-map.json
 
 .DS_Store
+.vercel

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minnesota 911 EMS Coverage Map - Official Ambulance Service Areas</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+#map { height: 100vh; width: 100%; }
+.sidebar {
+  position: absolute; top: 10px; right: 10px; z-index: 1000;
+  background: #fff; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  width: 340px; max-height: calc(100vh - 20px); overflow-y: auto;
+}
+.sidebar h2 { padding: 14px 16px 6px; font-size: 16px; }
+.sidebar .subtitle { padding: 0 16px 12px; font-size: 12px; color: #888; border-bottom: 1px solid #eee; }
+.nav-links { padding: 8px 16px; border-bottom: 1px solid #eee; font-size: 12px; }
+.nav-links a { color: #3498db; text-decoration: none; margin-right: 12px; }
+.nav-links a.active { font-weight: 600; color: #333; }
+.zoom-btns { padding: 8px 16px; border-bottom: 1px solid #eee; display: flex; gap: 6px; flex-wrap: wrap; }
+.zoom-btn { padding: 4px 10px; border: 1px solid #ddd; border-radius: 4px; background: #fff; font-size: 11px; cursor: pointer; }
+.zoom-btn:hover { background: #f0f0f0; }
+.search-bar { padding: 8px 16px; border-bottom: 1px solid #eee; }
+.search-bar input { width: 100%; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; }
+.legend { padding: 10px 16px; }
+.legend-section { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin: 10px 0 4px; }
+.legend-item { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 12px; }
+.legend-swatch { width: 14px; height: 10px; border-radius: 2px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1); }
+.footer { padding: 10px 16px; font-size: 10px; color: #aaa; border-top: 1px solid #eee; line-height: 1.4; }
+.auth-badge { display: inline-block; background: #d4edda; color: #155724; font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
+.district-label span { font-size: 9px; font-weight: 600; color: #fff; white-space: nowrap; text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px #000; pointer-events: none; }
+.info-popup h3 { margin: 0 0 6px; font-size: 14px; }
+.info-popup .row { font-size: 12px; color: #444; margin-bottom: 3px; }
+.info-popup .row strong { color: #222; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="sidebar">
+  <h2>Minnesota 911 EMS Coverage <span class="auth-badge">AUTHORITATIVE</span></h2>
+  <div class="subtitle">478 official ambulance Primary Service Areas from EMSRB. 249 agencies.</div>
+  <div class="nav-links">
+    <a href="index.html">US Map</a>
+    <a href="colorado.html">Colorado</a>
+    <a href="georgia.html">Georgia</a>
+    <a href="minnesota.html" class="active">Minnesota</a>
+    <a href="contribute.html" style="color:#e67e22">Report Error</a>
+  </div>
+  <div class="zoom-btns">
+    <button class="zoom-btn" data-lat="44.98" data-lng="-93.27" data-z="11">Twin Cities</button>
+    <button class="zoom-btn" data-lat="44.08" data-lng="-92.48" data-z="11">Rochester</button>
+    <button class="zoom-btn" data-lat="46.78" data-lng="-92.11" data-z="11">Duluth</button>
+    <button class="zoom-btn" data-lat="46.3" data-lng="-94.8" data-z="7">Statewide</button>
+  </div>
+  <div class="search-bar"><input type="text" id="search" placeholder="Search ambulance service or county..."></div>
+  <div class="legend">
+    <div class="legend-section">Service Level</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#e74c3c"></div> Advanced Life Support (ALS)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#3498db"></div> Basic Life Support (BLS)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#9b59b6"></div> Basic + Part-Time Advanced</div>
+    <div class="legend-section">Data Source</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#d4edda;border-color:#155724"></div> MN EMSRB - legally authoritative PSA boundaries</div>
+  </div>
+  <div class="footer">
+    Source: Minnesota Emergency Medical Services Regulatory Board (EMSRB).
+    These are legally designated Primary Service Areas, not estimates.
+    Published on MN Geospatial Commons. This is the gold standard for EMS coverage data.
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const LEVEL_COLORS = {
+  'Advanced': '#e74c3c',
+  'Basic': '#3498db',
+  'Basic Part-Time Advanced': '#9b59b6',
+};
+
+const map = L.map('map').setView([46.3, -94.8], 7);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+}).addTo(map);
+
+let areaLyrs = {};
+const labelGroup = L.layerGroup();
+
+Promise.all([
+  fetch('data/mn-state-simple.geojson').then(r => r.json()),
+  fetch('data/mn-ems-areas-simple.geojson').then(r => r.json()),
+]).then(([state, areas]) => {
+  L.geoJSON(state, { style: { fillColor: 'transparent', fillOpacity: 0, color: '#fff', weight: 1.5, opacity: 0.2 } }).addTo(map);
+
+  areas.features.forEach(f => {
+    const p = f.properties;
+    const name = p.AmbServNam || 'Unknown';
+    const level = p.ServLevel || 'Unknown';
+    const county = p.County || '';
+    const region = p.EMSRegion || '';
+    const license = p.AmbLiceNum || '';
+    const color = LEVEL_COLORS[level] || '#95a5a6';
+
+    const lyr = L.geoJSON(f, {
+      style: { fillColor: color, fillOpacity: 0.45, color: '#fff', weight: 1, opacity: 0.6 }
+    }).addTo(map);
+
+    lyr.bindPopup(`
+      <div class="info-popup">
+        <h3>${name}</h3>
+        <div class="row"><strong>Service Level:</strong> ${level}</div>
+        <div class="row"><strong>County:</strong> ${county}</div>
+        <div class="row"><strong>EMS Region:</strong> ${region}</div>
+        <div class="row"><strong>License #:</strong> ${license}</div>
+        <div class="row"><strong>Data Source:</strong> MN EMSRB (authoritative)</div>
+      </div>
+    `);
+
+    lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.7, weight: 2 }); });
+    lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.45, weight: 1 }); });
+
+    const key = name + '_' + county;
+    areaLyrs[key] = lyr;
+
+    const bounds = lyr.getBounds();
+    L.marker(bounds.getCenter(), {
+      icon: L.divIcon({ className: 'district-label', html: `<span>${name.split(',')[0]}</span>`, iconSize: null })
+    }).addTo(labelGroup);
+  });
+
+  function updateLabels() {
+    if (map.getZoom() >= 9) { if (!map.hasLayer(labelGroup)) labelGroup.addTo(map); }
+    else { if (map.hasLayer(labelGroup)) map.removeLayer(labelGroup); }
+  }
+  map.on('zoomend', updateLabels);
+  updateLabels();
+
+  document.getElementById('search').addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    if (q.length < 2) return;
+    for (const [key, lyr] of Object.entries(areaLyrs)) {
+      if (key.toLowerCase().includes(q)) {
+        map.fitBounds(lyr.getBounds().pad(0.3));
+        lyr.getLayers()[0].openPopup();
+        return;
+      }
+    }
+  });
+});
+
+document.querySelectorAll('.zoom-btn').forEach(btn => {
+  btn.addEventListener('click', () => map.setView([+btn.dataset.lat, +btn.dataset.lng], +btn.dataset.z));
+});
+</script>
+</body>
+</html>
