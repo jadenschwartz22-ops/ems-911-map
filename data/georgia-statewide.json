@@ -1,0 +1,1829 @@
+{
+  "state": "Georgia",
+  "fips": "13",
+  "total_counties": 159,
+  "last_updated": "2026-03-16",
+  "data_sources": [
+    "Georgia Department of Public Health EMS Division (dph.georgia.gov/EMS)",
+    "FY 2021 GTCNC EMS Trauma Related Equipment Grant - Ambulance Count by County (trauma.georgia.gov)",
+    "Priority Ambulance / Central EMS / National EMS / Puckett EMS / Ambucare (priorityambulance.com)",
+    "AMR Georgia locations (amr.net)",
+    "Grady EMS (gradyhealth.org)",
+    "MetroAtlanta Ambulance Service (maas911.com)",
+    "AmeriPro Health (ameriprohealth.com)",
+    "Community Ambulance / MGAS Holdings (ourcommunityambulance.org)",
+    "Gold Cross EMS (goldcrossems.com)",
+    "West Georgia Ambulance Services (westgeorgiaambulance.com)",
+    "Individual county government websites",
+    "Georgia Emergency Management & Homeland Security Agency 911 Center Directory (gema.georgia.gov)"
+  ],
+  "notes": "Georgia has 159 counties. EMS is organized into 10 EMS regions. Providers include county-run third service, fire-based, hospital-based, and private contracted services. Grady EMS (hospital-based out of Atlanta) has aggressively expanded across the state, especially in rural south Georgia. Priority Ambulance operates four brands in GA: Central EMS, National EMS, Puckett EMS, and Ambucare. AMR holds contracts in several metro-area counties. Many rural counties operate their own county EMS as a third service.",
+  "agencies": [
+    {
+      "name": "Grady EMS",
+      "type": "hospital_based",
+      "parent_organization": "Grady Health System",
+      "headquarters": "Atlanta, GA",
+      "counties_served_911": ["Fulton", "Baldwin", "Baker", "Ben Hill", "Brooks", "Clay", "Cook", "Decatur", "Hancock", "McIntosh", "Mitchell", "Pierce", "Pike", "Quitman", "Randolph", "Seminole", "Worth"],
+      "ambulance_count_approx": 150,
+      "notes": "Largest ambulance provider in Georgia. Serves City of Atlanta and south Fulton County for 911, plus 16+ rural counties mostly in south Georgia. Handles ~140,000 requests annually. South Georgia HQ in Albany. Also provides specialty care transports statewide.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.gradyhealth.org/grady-ems/",
+        "https://en.wikipedia.org/wiki/Grady_EMS",
+        "https://www.gradyhealth.org/grady-ems-opens-south-georgia-headquarters/"
+      ]
+    },
+    {
+      "name": "American Medical Response (AMR)",
+      "type": "private",
+      "parent_organization": "Global Medical Response",
+      "counties_served_911": ["DeKalb", "Fulton", "Troup", "Coweta", "Meriwether", "Fayette"],
+      "notes": "AMR serves North Fulton County (separate zone from Grady's south Fulton/Atlanta zone). DeKalb County contract extended through June 2026 with $4.89M subsidy. Troup County 911 provider since 1993. AMR Coweta also covers Meriwether and Fayette counties and South Fulton areas.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.amr.net/locations/georgia/dekalb-county",
+        "https://www.amr.net/locations/georgia/north-fulton-county",
+        "https://www.amr.net/locations/georgia/troup-county",
+        "https://www.amr.net/locations/georgia/coweta-county"
+      ]
+    },
+    {
+      "name": "National EMS (Priority Ambulance)",
+      "type": "private",
+      "parent_organization": "Priority Ambulance",
+      "headquarters": "Athens, GA",
+      "counties_served_911": ["Clarke", "Oconee", "Morgan", "Rockdale", "Newton"],
+      "notes": "Founded 1976. Georgia's first nationally accredited (CAAS) EMS provider (1983). Acquired by Priority Ambulance in 2018. Serves Athens-Clarke County, Oconee, Morgan, Rockdale. Also provides 911 in Newton County zone (Piedmont Newton Hospital partnership). UGA Athletic Association preferred provider.",
+      "confidence": "high",
+      "source_urls": [
+        "https://priorityambulance.com/brands/national-ems/",
+        "https://www.nationalems.com/",
+        "https://priorityambulance.com/piedmont-newton-partners-with-priority-ambulance-for-9-1-1-interfacility-services/"
+      ]
+    },
+    {
+      "name": "Central EMS (Priority Ambulance)",
+      "type": "private",
+      "parent_organization": "Priority Ambulance",
+      "headquarters": "Atlanta, GA",
+      "counties_served_911": ["Forsyth", "Richmond", "Newton"],
+      "notes": "Exclusive 911 provider for Forsyth County since 2015. Took over Richmond County (Augusta) in April 2023 after Gold Cross EMS exited. Also 911 provider in Newton County. Provides transport services in Bibb, Bulloch, Chatham, Coweta, Fulton areas.",
+      "confidence": "high",
+      "source_urls": [
+        "https://priorityambulance.com/brands/central-ems/",
+        "https://www.centralems.com/"
+      ]
+    },
+    {
+      "name": "Puckett EMS (Priority Ambulance)",
+      "type": "private",
+      "parent_organization": "Priority Ambulance",
+      "counties_served_911": ["Cobb", "Walker", "Dade"],
+      "notes": "911 provider for southwest Cobb County (Powder Springs, Mableton, Austell area, ~350K population). Previously held Walker and Dade county contracts (transitioned to CHI Memorial EMS in 2021 for those counties). Was Catoosa County provider before Angel EMS.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://priorityambulance.com/brands/puckett-ems/",
+        "https://www.puckettems.com/"
+      ]
+    },
+    {
+      "name": "Ambucare (Priority Ambulance)",
+      "type": "private",
+      "parent_organization": "Priority Ambulance",
+      "headquarters": "Bremen, GA",
+      "counties_served_911": ["Haralson"],
+      "notes": "Primary 911 provider for Haralson County since 1973. Joined Priority Ambulance in 2021. CAAS accredited. Mutual aid with Polk, Paulding, and Carroll counties. Also provides non-emergency transport to surrounding counties.",
+      "confidence": "high",
+      "source_urls": [
+        "https://priorityambulance.com/brands/ambucare/",
+        "https://www.haralsoncountyga.gov/ambulance-service.cfm"
+      ]
+    },
+    {
+      "name": "MetroAtlanta Ambulance Service (MAAS)",
+      "type": "private",
+      "headquarters": "Marietta, GA",
+      "counties_served_911": ["Cobb", "Bartow", "Paulding"],
+      "notes": "Founded 2001. Designated 911 ambulance provider for Bartow, Cobb, and Paulding counties. Covers 1,200 square miles and 1M+ residents. Cobb County uses a tiered model: fire departments provide first response ALS, MAAS handles ambulance transport. Also operates as Coastal EMS in greater Savannah area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.maas911.com/",
+        "https://www.maas911.com/services/9-1-1-emergency/"
+      ]
+    },
+    {
+      "name": "Community Ambulance (MGAS Holdings)",
+      "type": "private",
+      "counties_served_911": ["Bibb", "Lamar", "Upson", "Crawford", "Muscogee"],
+      "ambulance_count_approx": 50,
+      "notes": "Formerly Mid Georgia Ambulance. CAAS accredited. 250+ EMS professionals. Serves 5 Georgia counties with 911 coverage. In Bibb County shares 911 zones with Atrium Health Navicent EMS. Also covers Lamar, Upson, Crawford, and Muscogee counties.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.linkedin.com/company/mid-georgia-ambulance",
+        "https://www.accg.org/partner_detailb.php?cid=9608"
+      ]
+    },
+    {
+      "name": "Gold Cross EMS",
+      "type": "private",
+      "headquarters": "Martinez, GA (Augusta area)",
+      "counties_served_911": ["Columbia", "Jefferson"],
+      "notes": "CAAS accredited. 911 provider for Columbia and Jefferson counties. Previously served Richmond County but exited in April 2023 (Central EMS took over). Partnered with SouthStar EMS in 2021.",
+      "confidence": "high",
+      "source_urls": [
+        "https://goldcrossems.com/",
+        "https://goldcrossems.com/about/"
+      ]
+    },
+    {
+      "name": "AmeriPro EMS (AmeriPro Health)",
+      "type": "private",
+      "counties_served_911": ["Upson", "Lamar", "Pike", "Randolph", "Clay", "Quitman", "Sumter", "Terrell", "Ben Hill"],
+      "notes": "Provides 911, BLS/ALS, CCT, and interfacility ambulance services. Specializes in rural market EMS. Partnership with Upson and Lamar counties announced 2022. Some overlap with Grady EMS in certain counties.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://www.ameriprohealth.com/locations/georgia",
+        "https://www.ameriprohealth.com/press-releases/ameripro-ems-announces-partnership-with-upson-lamar-counties-in-georgia"
+      ]
+    },
+    {
+      "name": "West Georgia Ambulance Service",
+      "type": "private",
+      "parent_organization": "Tanner Health System",
+      "counties_served_911": ["Carroll"],
+      "notes": "911 provider for Carroll County for 50+ years. Acquired by Tanner Health System. Holds the 911 EMS Zone License for Carroll County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.westgeorgiaambulance.com/",
+        "https://gradickcommunications.com/carroll-county-board-of-commissioners-approves-seventh-ambulance/"
+      ]
+    },
+    {
+      "name": "Chatham Emergency Services (CES)",
+      "type": "third_service",
+      "counties_served_911": ["Chatham"],
+      "notes": "Countywide exclusive 911 emergency and non-emergency ambulance service. Community-owned nonprofit since 1961. 630 sq miles, 320K population. 75,000+ EMS calls/year. 250 employees. CAAS accredited. One of only 7 CAAS-accredited services in Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://chathames.org/"
+      ]
+    },
+    {
+      "name": "Gwinnett County Fire & Emergency Services",
+      "type": "fire_based",
+      "counties_served_911": ["Gwinnett"],
+      "ambulance_count": 48,
+      "notes": "Serves 1M+ population. 31 fire stations, 33 ambulances. 107,000+ requests annually. Transport fee $975 flat + $15/mile. All vehicles ALS equipped.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.gwinnettcounty.com/departments/fireandemergencyservices"
+      ]
+    },
+    {
+      "name": "Clayton County Fire & Emergency Services",
+      "type": "fire_based",
+      "counties_served_911": ["Clayton"],
+      "ambulance_count": 22,
+      "notes": "12 ALS ambulances, 3 Community Treatment units with NPs and paramedics, 1 Community Care Unit. City of Forest Park Fire EMS (4 ambulances) and City of Morrow Fire/EMS (3 ambulances) also serve within Clayton County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://ccfes.org/about/organization/ems/"
+      ]
+    },
+    {
+      "name": "Douglas County Fire/EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Douglas"],
+      "ambulance_count": 11,
+      "notes": "Fire department assumed EMS coverage, changed name to Douglas County Fire/EMS.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.douglascountyfireems.com/"
+      ]
+    },
+    {
+      "name": "Fayette County Fire & Emergency Services",
+      "type": "fire_based",
+      "counties_served_911": ["Fayette"],
+      "ambulance_count": 7,
+      "notes": "Primary fire, EMS, and EMA organization for Fayette County. 7 ALS ambulances staffed with paramedic and AEMT minimum. Peachtree City Fire Department also operates 7 ambulances within Fayette County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://fayettecountyga.gov/fire_ems/"
+      ]
+    },
+    {
+      "name": "Henry County Fire Department",
+      "type": "fire_based",
+      "counties_served_911": ["Henry"],
+      "ambulance_count": 19,
+      "notes": "CAAHEP accredited Paramedic Program. Fire-based EMS transport.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.henrycountyga.gov/175/Emergency-Services"
+      ]
+    },
+    {
+      "name": "Cherokee County Fire & Emergency Services",
+      "type": "fire_based",
+      "counties_served_911": ["Cherokee"],
+      "ambulance_count": 24,
+      "notes": "Internationally accredited, ISO Class 2 rated. 28 stations covering 434 sq miles, ~300K residents.",
+      "confidence": "high",
+      "source_urls": [
+        "https://cherokeecountyfire.org"
+      ]
+    },
+    {
+      "name": "Atrium Health Floyd EMS",
+      "type": "hospital_based",
+      "parent_organization": "Atrium Health Floyd",
+      "counties_served_911": ["Floyd", "Chattooga"],
+      "ambulance_count": 21,
+      "notes": "Hospital-based 911 EMS. Designated provider for Floyd and Chattooga counties (also Cherokee County, Alabama). Only Level II Trauma Center in NW Georgia. Four-time Georgia EMS of the Year. Provides field blood transfusions.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.floyd.org/medical-services/ems/Pages/default.aspx",
+        "https://www.atriumhealthfloydharbin.org/news/2022/floyd-ems-will-be-designated-ambulance-service-provider-in-chattooga"
+      ]
+    },
+    {
+      "name": "Redmond Regional EMS",
+      "type": "hospital_based",
+      "parent_organization": "Redmond Regional Medical Center",
+      "counties_served_911": ["Chattooga", "Polk"],
+      "ambulance_count": 10,
+      "notes": "Hospital-based EMS serving Chattooga County (4 ambulances) and Polk County (6 ambulances). Chattooga County has both Floyd EMS and Redmond Regional operating.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Hamilton Emergency Medical Services (HEMS)",
+      "type": "private",
+      "parent_organization": "Vitruvian Health",
+      "counties_served_911": ["Whitfield"],
+      "ambulance_count": 13,
+      "notes": "Exclusive 911 coverage for Whitfield County (~104K residents) under performance contract. Designated Advanced Life Support service. 2019 Region 1 EMS of the Year.",
+      "confidence": "high",
+      "source_urls": [
+        "https://vitruvianhealth.com/locations/hamilton-emergency-medical-services-hems/"
+      ]
+    },
+    {
+      "name": "Angel EMS (Priority Ambulance)",
+      "type": "private",
+      "parent_organization": "Priority Ambulance",
+      "counties_served_911": ["Catoosa"],
+      "ambulance_count": 14,
+      "notes": "911 provider for Catoosa County since 2009. Joined Priority Ambulance in 2018. 14 ambulances, 60+ employees. Provides non-emergency to Walker, Dade, Whitfield.",
+      "confidence": "high",
+      "source_urls": [
+        "https://newschannel9.com/news/local/catoosa-county-based-angel-ems-joining-national-ambulance-company"
+      ]
+    },
+    {
+      "name": "CHI Memorial EMS",
+      "type": "hospital_based",
+      "parent_organization": "CommonSpirit Health",
+      "counties_served_911": ["Walker", "Dade"],
+      "notes": "Took over Walker and Dade county 911 contracts from Puckett EMS in February 2021. 32+ years of EMS experience. 5 ambulances for 24-hour service. Received $1.3M grants for equipment upgrades in 2025.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.northwestgeorgianews.com/catoosa_walker_news/chi-memorial-now-provides-ems-services-in-walker-and-dade-counties/article_2d0b3e1a-6563-11eb-9d14-37b48a8a8cb4.html"
+      ]
+    },
+    {
+      "name": "Dougherty County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Dougherty"],
+      "ambulance_count": 14,
+      "notes": "Career EMS system in Albany, GA. Sole 911 provider for Dougherty County. 22,000+ EMS calls/year. Six 24/7 ALS ambulances + one 12-hour unit. 52 career paramedics/AEMTs + 25 part-time. 5 stations. 334 sq mile area, ~89,500 population.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.dougherty.ga.us/public-safety/ems/"
+      ]
+    },
+    {
+      "name": "SGMC Health EMS (South Georgia Medical Center)",
+      "type": "hospital_based",
+      "parent_organization": "SGMC Health",
+      "counties_served_911": ["Lowndes", "Lanier", "Echols"],
+      "ambulance_count": 17,
+      "notes": "Hospital-based ambulance service. 73 medics, 10 ambulances. Responds within 1,200 sq mile region. ~1,508 calls/month. 40+ years of service. Region 8 EMS Service of the Year.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.sgmc.org/sgmcs-mobile-healthcare-services-ems-turns-40/"
+      ]
+    },
+    {
+      "name": "Atrium Health Navicent EMS",
+      "type": "hospital_based",
+      "parent_organization": "Atrium Health Navicent",
+      "counties_served_911": ["Bibb", "Baldwin", "Jones", "Treutlen", "Twiggs", "Wilkinson"],
+      "ambulance_count": 29,
+      "notes": "Formerly Medical Center of Central Georgia. Serves central Georgia across six counties. In Bibb County shares 911 zones with Community Ambulance. Also known as The Medical Center of Central Georgia EMS.",
+      "confidence": "high",
+      "source_urls": [
+        "https://navicenthealth.org/service-center/emergency-medical-services"
+      ]
+    },
+    {
+      "name": "Heartland EMS",
+      "type": "private",
+      "counties_served_911": ["Bleckley", "Pulaski", "Wilkinson"],
+      "ambulance_count": 15,
+      "notes": "Serves rural central Georgia counties. Listed in GTCNC grant for Bleckley (12 ambulances), Pulaski (1), Wilkinson (2).",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Emory Healthcare EMS (Houston County EMS)",
+      "type": "hospital_based",
+      "parent_organization": "Emory Healthcare",
+      "counties_served_911": ["Houston"],
+      "ambulance_count": 18,
+      "notes": "Provides 24/7 911 emergency transportation to Houston County. 33,000+ ER responses/year. 70+ paramedics and EMTs. 18 ambulances, 8 stations. Formerly Houston Healthcare EMS.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.hhc.org/services/emergency-medical-services/"
+      ]
+    },
+    {
+      "name": "Columbus Fire & Emergency Medical Services",
+      "type": "fire_based",
+      "counties_served_911": ["Muscogee"],
+      "ambulance_count": 10,
+      "notes": "Serves Columbus/Muscogee consolidated government. Shares 911 coverage with EMS Care Ambulance and Community Ambulance.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.columbusga.gov/fire/About-Us/Who-we-are"
+      ]
+    },
+    {
+      "name": "EMS Care Ambulance",
+      "type": "private",
+      "counties_served_911": ["Muscogee", "Chattahoochee"],
+      "ambulance_count": 11,
+      "notes": "911 contract with Columbus/Muscogee County. Also serves Chattahoochee County. Provides emergency, long-distance, and facility transfers.",
+      "confidence": "high",
+      "source_urls": [
+        "https://emscareambulance.com/"
+      ]
+    },
+    {
+      "name": "Gold Star EMS",
+      "type": "private",
+      "counties_served_911": ["Sumter", "Clinch"],
+      "notes": "Listed in GTCNC grant for Sumter County (5 ambulances) and Clinch County (2 ambulances).",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Stephens County EMS",
+      "type": "hospital_based",
+      "parent_organization": "Stephens County Hospital Authority",
+      "counties_served_911": ["Stephens"],
+      "ambulance_count": 6,
+      "notes": "Joint agreement between Stephens County Board of Commissioners and Hospital Authority. Station One on hospital campus. ALS units handle 911 and critical care transfers.",
+      "confidence": "high",
+      "source_urls": [
+        "https://stephenscountyga.gov/ambulance-ems/"
+      ]
+    },
+    {
+      "name": "Emanuel County EMS",
+      "type": "hospital_based",
+      "parent_organization": "Emanuel Medical Center",
+      "counties_served_911": ["Emanuel"],
+      "ambulance_count": 5,
+      "notes": "Joint venture between Emanuel Medical Center (operates service, employs personnel) and County of Emanuel (funds payroll, maintains fleet).",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.emanuelco-ga.gov/213/EMS"
+      ]
+    },
+    {
+      "name": "Coffee Regional Medical Center EMS",
+      "type": "hospital_based",
+      "counties_served_911": ["Coffee"],
+      "ambulance_count": 7,
+      "notes": "Hospital-based EMS serving Coffee County.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "LifeBrite EMS",
+      "type": "hospital_based",
+      "counties_served_911": ["Early"],
+      "ambulance_count": 3,
+      "notes": "Listed as LifeBrite of Early County in GTCNC grant.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "WellStar Spalding EMS",
+      "type": "hospital_based",
+      "parent_organization": "WellStar Health System",
+      "counties_served_911": ["Spalding"],
+      "ambulance_count": 9,
+      "notes": "Listed as Spalding Regional Medical Center EMS. Joint facility with Griffin-Spalding County E9-1-1.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.spaldingcounty.com/departments-services/e-911-communications"
+      ]
+    },
+    {
+      "name": "Northeast Georgia Physicians Group EMS",
+      "type": "hospital_based",
+      "parent_organization": "Northeast Georgia Health System",
+      "counties_served_911": ["Barrow", "White"],
+      "notes": "Public-private partnership with Barrow County. Operates ambulances from 6 fire stations + 1 at NGMC Barrow. Also serves White County. Hospital system-affiliated EMS.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.barrowga.org/230/Fire-Department"
+      ]
+    },
+    {
+      "name": "Mercy Ambulance (Chatham)",
+      "type": "private",
+      "counties_served_911": ["Chatham"],
+      "ambulance_count": 46,
+      "notes": "Listed in GTCNC grant as Chatham-Mercy Ambulance with 46 ambulances. Likely operates alongside Chatham Emergency Services.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Excelsior Ambulance",
+      "type": "private",
+      "counties_served_911": ["Long"],
+      "ambulance_count": 6,
+      "notes": "Listed in GTCNC grant for Long County with 6 ambulances.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Toombs-Montgomery EMS",
+      "type": "third_service",
+      "counties_served_911": ["Toombs", "Montgomery"],
+      "ambulance_count": 9,
+      "notes": "Joint county EMS service covering both Toombs and Montgomery counties. 8 ambulances in Toombs, 1 in Montgomery.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Veterans Medical Transport",
+      "type": "private",
+      "counties_served_911": ["Pike"],
+      "ambulance_count": 2,
+      "notes": "Listed as Pike-Veterans Medical Transport in GTCNC grant.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Taylor Regional Hospital EMS",
+      "type": "hospital_based",
+      "counties_served_911": ["Pulaski"],
+      "ambulance_count": 3,
+      "notes": "Hospital-based EMS listed under Pulaski County in GTCNC grant.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Atlanta Fire Rescue Department",
+      "type": "fire_based",
+      "counties_served_911": ["Fulton"],
+      "ambulance_count": 5,
+      "notes": "Provides first response within City of Atlanta. Grady EMS handles primary ambulance transport. Atlanta Fire operates 5 ambulances as supplemental.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "City of Hapeville EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Fulton"],
+      "ambulance_count": 3,
+      "notes": "Hapeville operates its own ambulance service within Fulton County. Small city south of Atlanta near airport.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Piedmont Newton Hospital EMS",
+      "type": "hospital_based",
+      "parent_organization": "Piedmont Healthcare",
+      "counties_served_911": ["Newton"],
+      "ambulance_count": 5,
+      "notes": "Hospital-based EMS. Partners with Priority Ambulance/National EMS for 911 response in Newton County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.covnews.com/news/business/piedmont-use-outside-company-newton-county-emergency-service/"
+      ]
+    },
+    {
+      "name": "Colquitt/Miller County Fire/EMS",
+      "type": "third_service",
+      "counties_served_911": ["Colquitt", "Miller"],
+      "ambulance_count": 11,
+      "notes": "Combined EMS service for Colquitt and Miller counties. Colquitt County EMS has 7 ambulances, Miller has 4.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.colquittcountyga.gov/departments/communications_911.php"
+      ]
+    },
+    {
+      "name": "Jackson County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Jackson"],
+      "ambulance_count": 13,
+      "notes": "County-run EMS. 7 ALS ambulances (6 staffed 24/7, 1 for 12 hours). 95%+ staff are paramedics. Located in Athens area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.jacksoncountygov.com/200/EMS"
+      ]
+    },
+    {
+      "name": "Walton County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Walton"],
+      "ambulance_count": 9,
+      "notes": "County-run EMS. 6 ambulances 24/7 in strategic locations + 2 reserve. Staffed by EMT-Is and Paramedics.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.waltoncountyga.gov/159/Emergency-Medical-Services"
+      ]
+    },
+    {
+      "name": "Barrow County Fire and EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Barrow"],
+      "ambulance_count": 9,
+      "notes": "Fire-based EMS with public-private partnership through Northeast Georgia Physicians Group. 6 fire stations with 8 ambulances + 1 at NGMC Barrow.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.barrowga.org/230/Fire-Department"
+      ]
+    },
+    {
+      "name": "Madison County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Madison"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS in the Athens area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.madisoncountyga.us/services/emergency-medical-services"
+      ]
+    },
+    {
+      "name": "Oglethorpe County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Oglethorpe"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS in the Athens area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.oglethorpecountyga.gov/ems"
+      ]
+    },
+    {
+      "name": "Greene County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Greene"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS. 3 stations strategically placed. Most of population within 10-minute response. Athens area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.greenecountyga.gov/251/Emergency-Medical-Service"
+      ]
+    },
+    {
+      "name": "Elbert County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Elbert"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS in Region 10.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Thomas County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Thomas"],
+      "ambulance_count": 11,
+      "notes": "County-run EMS. 7 ALS ambulances + 1 extrication unit. ~10,100 calls/year. Serves Thomasville, Barwick, Boston, Coolidge, Meigs, Metcalf, Ochlocknee, Pavo.",
+      "confidence": "high",
+      "source_urls": [
+        "https://thomascountyboc.org/emergency-medical-service"
+      ]
+    },
+    {
+      "name": "Tift County Fire and Rescue (EMS)",
+      "type": "fire_based",
+      "counties_served_911": ["Tift"],
+      "ambulance_count": 7,
+      "notes": "EMS is part of Tift County Department of Public Safety along with Fire Rescue, E-911, and Emergency Management.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.tiftcounty.org/departments/department_of_public_safety_2.php"
+      ]
+    },
+    {
+      "name": "Harris County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Harris"],
+      "ambulance_count": 6,
+      "notes": "ALS ambulance service county-wide. 5 EMS stations, 24/7 with 2 paramedics/EMTs per shift per station.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.harriscountyga.gov/ems/"
+      ]
+    },
+    {
+      "name": "Glynn County Fire Department EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Glynn"],
+      "ambulance_count": 10,
+      "notes": "Combined fire and ambulance service. Station 8 provides EMS. Jekyll Island Fire/EMS operates 2 additional ambulances within Glynn County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.glynncounty.org/63/911-Center"
+      ]
+    },
+    {
+      "name": "Habersham County Emergency Services",
+      "type": "third_service",
+      "counties_served_911": ["Habersham"],
+      "ambulance_count": 9,
+      "notes": "~100 full/part-time personnel. 50,000+ citizens served. 6 firehouses + 1 EMS house. 12,000+ calls/year. 5 24/7 paramedic-staffed med units.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.habershamga.com/ambulance-and-fire-services.cfm"
+      ]
+    },
+    {
+      "name": "Hall County Fire Services EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Hall"],
+      "ambulance_count": 21,
+      "notes": "Fire-based EMS. EMS Division at 470 Crescent Drive, Gainesville. Northeast Georgia Medical Center is the major hospital in the county.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.hallcounty.org/218/Ambulance-Services"
+      ]
+    },
+    {
+      "name": "Dawson County Emergency Services",
+      "type": "third_service",
+      "counties_served_911": ["Dawson"],
+      "ambulance_count": 5,
+      "notes": "Operates 4 paramedic-level ambulances + 1 paramedic-level engine daily.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.dawsoncountyga.gov/455/Emergency-Services"
+      ]
+    },
+    {
+      "name": "Bryan County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Bryan"],
+      "ambulance_count": 12,
+      "notes": "County-run EMS in coastal Georgia, Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Bulloch County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Bulloch"],
+      "ambulance_count": 8,
+      "notes": "Advanced Life Support ambulance service serving Bulloch County (Statesboro area).",
+      "confidence": "high",
+      "source_urls": [
+        "https://bullochcounty.net/ems/"
+      ]
+    },
+    {
+      "name": "Effingham County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Effingham"],
+      "ambulance_count": 10,
+      "notes": "County EMS in coastal Georgia, Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.effinghamcounty.org/278/Emergency-Medical-Services-EMS"
+      ]
+    },
+    {
+      "name": "Liberty Regional EMS",
+      "type": "third_service",
+      "counties_served_911": ["Liberty"],
+      "ambulance_count": 8,
+      "notes": "Full-time EMS covering all of Liberty County. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "http://www.libertycountyga.gov/521/Emergency-Medical-Services"
+      ]
+    },
+    {
+      "name": "Camden County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Camden"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS. Region 9 coastal Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Ware County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Ware"],
+      "ambulance_count": 6,
+      "notes": "County-run EMS. Waycross area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Laurens County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Laurens"],
+      "ambulance_count": 11,
+      "notes": "County-run EMS. Fleet of 10 ALS ambulances. 24/7/365 emergency medical response.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.laurenscoga.org/166/Emergency-Medical-Services-EMS"
+      ]
+    },
+    {
+      "name": "Crisp County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Crisp"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Lee County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Lee"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Burke County EMA/EMS",
+      "type": "third_service",
+      "counties_served_911": ["Burke"],
+      "ambulance_count": 12,
+      "notes": "County-run EMS. Region 6 east Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "McDuffie County EMS",
+      "type": "third_service",
+      "counties_served_911": ["McDuffie"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 6 east Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Gordon County Ambulance",
+      "type": "third_service",
+      "counties_served_911": ["Gordon"],
+      "ambulance_count": 8,
+      "notes": "County-run ambulance service. Region 1 northwest Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Murray EMS",
+      "type": "third_service",
+      "counties_served_911": ["Murray"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 1 northwest Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Pickens County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Pickens"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS. Region 1 northwest Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Fannin County Fire and EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Fannin"],
+      "ambulance_count": 7,
+      "notes": "Combined fire/EMS. Region 1 northwest Georgia mountains.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Gilmer County Fire and EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Gilmer"],
+      "ambulance_count": 6,
+      "notes": "Combined fire/EMS. Region 1 northwest Georgia mountains.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Banks County Fire and EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Banks"],
+      "ambulance_count": 6,
+      "notes": "Combined fire/EMS. Region 2 northeast Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Franklin County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Franklin"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 2 northeast Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Hart County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Hart"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS. Region 2 northeast Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "http://hartcountyga.gov/ems.html"
+      ]
+    },
+    {
+      "name": "Lumpkin County Emergency Services",
+      "type": "third_service",
+      "counties_served_911": ["Lumpkin"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 2 northeast Georgia. Dahlonega area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.lumpkincounty.gov/181/E-911-Center"
+      ]
+    },
+    {
+      "name": "Rabun County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Rabun"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 2 northeast Georgia mountains.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.rabuncounty.ga.gov/ems"
+      ]
+    },
+    {
+      "name": "Towns County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Towns"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Region 2 northeast Georgia mountains.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Union County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Union"],
+      "ambulance_count": 7,
+      "notes": "County-run EMS. Region 2 northeast Georgia mountains. Blairsville area.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "DeKalb County Fire",
+      "type": "fire_based",
+      "counties_served_911": ["DeKalb"],
+      "ambulance_count": 7,
+      "notes": "DeKalb County Fire operates 7 ambulances as supplemental to AMR which holds the primary 911 ambulance contract (48 ambulances).",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.dekalbcountyga.gov/news/dekalb-county-invests-stronger-ems-system-expands-ambulance-services"
+      ]
+    },
+    {
+      "name": "Coweta County Fire/Rescue EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Coweta"],
+      "ambulance_count": 15,
+      "notes": "County fire provides first response. AMR Coweta provides ambulance transport. 15 ambulances listed in GTCNC grant under Coweta County EMS.",
+      "confidence": "medium",
+      "source_urls": [
+        "https://www.coweta.ga.us/departments-services/departments-f-q/fire-rescue-ems/rescue-ems"
+      ]
+    },
+    {
+      "name": "Meriwether County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Meriwether"],
+      "ambulance_count": 8,
+      "notes": "County-run EMS. AMR Coweta also provides transport. Region 4.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.meriwethercountyga.gov/155/E-911-Communications"
+      ]
+    },
+    {
+      "name": "Butts County Fire Department EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Butts"],
+      "ambulance_count": 5,
+      "notes": "Fire-based EMS. Region 4.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Heard County EMA/EMS",
+      "type": "third_service",
+      "counties_served_911": ["Heard"],
+      "ambulance_count": 5,
+      "notes": "County emergency management/EMS. Region 4.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Grady County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Grady"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS (not to be confused with Grady EMS/Grady Health System). Grady County is in southwest Georgia near Thomasville. Region 8.",
+      "confidence": "high",
+      "source_urls": [
+        "https://gradycountyga.gov/public-safety/emergency-medical-service/"
+      ]
+    },
+    {
+      "name": "Berrien County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Berrien"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Calhoun County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Calhoun"],
+      "ambulance_count": 2,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Dooly County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Dooly"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Irwin County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Irwin"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Terrell County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Terrell"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Turner County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Turner"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 8 south Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Dodge County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Dodge"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Region 5 central Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Jasper County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Jasper"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 5 central Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Johnson County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Johnson"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 5 central Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Monroe County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Monroe"],
+      "ambulance_count": 6,
+      "notes": "County-run EMS. Region 5 central Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Peach County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Peach"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Fort Valley area. Region 5.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Putnam County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Putnam"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Eatonton area. Region 5.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Telfair County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Telfair"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 5 central Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Washington County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Washington"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Sandersville area. Region 5.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Wheeler County Ambulance Service",
+      "type": "third_service",
+      "counties_served_911": ["Wheeler"],
+      "ambulance_count": 3,
+      "notes": "County-run ambulance service. Region 5.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Wilcox County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Wilcox"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 5.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Wilkinson County Ambulance Service",
+      "type": "third_service",
+      "counties_served_911": ["Wilkinson"],
+      "ambulance_count": 3,
+      "notes": "County-run ambulance service. Heartland EMS also operates 2 ambulances in Wilkinson. Region 5.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Jenkins County Ambulance Service",
+      "type": "third_service",
+      "counties_served_911": ["Jenkins"],
+      "ambulance_count": 3,
+      "notes": "County-run ambulance service. Region 6.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Lincoln County OES/EMS",
+      "type": "third_service",
+      "counties_served_911": ["Lincoln"],
+      "ambulance_count": 3,
+      "notes": "Office of Emergency Services provides EMS. Region 6.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Screven County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Screven"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 6 east Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Warren County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Warren"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 6.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Wilkes County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Wilkes"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Region 6 east Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Macon County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Macon"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS (not to be confused with Macon-Bibb County). Region 7 west central Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://www.maconcountyga.gov/emergency-medical-service.cfm"
+      ]
+    },
+    {
+      "name": "Marion County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Marion"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 7.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Schley County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Schley"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 7.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Stewart County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Stewart"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 7.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Talbot County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Talbot"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 7.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Taylor County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Taylor"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Region 7.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Webster County Fire/EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Webster"],
+      "ambulance_count": 2,
+      "notes": "Combined fire/EMS. Region 7. One of Georgia's smallest counties.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Appling County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Appling"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Region 9 southeast Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Atkinson County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Atkinson"],
+      "ambulance_count": 10,
+      "notes": "County-run EMS. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Alma Bacon County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Bacon"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Alma is the county seat. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Brantley County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Brantley"],
+      "ambulance_count": 6,
+      "notes": "County-run EMS. Region 9 southeast Georgia.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Candler County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Candler"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Metter area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Charlton County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Charlton"],
+      "ambulance_count": 3,
+      "notes": "County-run EMS. Folkston area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Evans County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Evans"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Claxton area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Jeff Davis County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Jeff Davis"],
+      "ambulance_count": 4,
+      "notes": "County-run EMS. Hazlehurst area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Tattnall County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Tattnall"],
+      "ambulance_count": 6,
+      "notes": "County-run EMS. Reidsville area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Wayne County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Wayne"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS. Jesup area. Region 9.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Bartow County EMS / Bartow County Fire",
+      "type": "third_service",
+      "counties_served_911": ["Bartow"],
+      "ambulance_count": 13,
+      "notes": "Bartow County EMS operates 11 ambulances (MetroAtlanta Ambulance contract). Bartow County Fire operates 2 additional. MAAS is the designated 911 ambulance transport provider.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Dade County EMS",
+      "type": "third_service",
+      "counties_served_911": ["Dade"],
+      "ambulance_count": 5,
+      "notes": "County-run EMS operates 5 ambulances. CHI Memorial Hospital EMS also operates 2 ambulances in Dade County. CHI Memorial took over primary 911 contract in 2021.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "West Point Fire Department EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Troup"],
+      "ambulance_count": 2,
+      "notes": "City of West Point operates 2 ambulances within Troup County. AMR is the primary county 911 provider.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "Peachtree City Fire Department EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Fayette"],
+      "ambulance_count": 7,
+      "notes": "City of Peachtree City operates 7 ambulances within Fayette County alongside Fayette County Fire & Emergency Services.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "City of Forest Park Fire EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Clayton"],
+      "ambulance_count": 4,
+      "notes": "City operates 4 ambulances within Clayton County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    },
+    {
+      "name": "City of Morrow Fire and EMS",
+      "type": "fire_based",
+      "counties_served_911": ["Clayton"],
+      "ambulance_count": 3,
+      "notes": "City operates 3 ambulances within Clayton County.",
+      "confidence": "high",
+      "source_urls": [
+        "https://trauma.georgia.gov/document/document/afy-2021-ambulance-countpdf/download"
+      ]
+    }
+  ],
+  "county_coverage": {
+    "Appling": {"primary_provider": "Appling County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Atkinson": {"primary_provider": "Atkinson County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Bacon": {"primary_provider": "Alma Bacon County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Baker": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Baldwin": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Banks": {"primary_provider": "Banks County Fire and EMS", "type": "fire_based", "region": 2, "confidence": "high"},
+    "Barrow": {"primary_provider": "Barrow County Fire and EMS / NE Georgia Physicians Group", "type": "fire_based", "region": 10, "confidence": "high"},
+    "Bartow": {"primary_provider": "MetroAtlanta Ambulance Service", "type": "private", "region": 1, "confidence": "high"},
+    "Ben Hill": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Berrien": {"primary_provider": "Berrien County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Bibb": {"primary_provider": "Atrium Health Navicent EMS / Community Ambulance (dual zone)", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Bleckley": {"primary_provider": "Heartland EMS", "type": "private", "region": 5, "confidence": "medium"},
+    "Brantley": {"primary_provider": "Brantley County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Brooks": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Bryan": {"primary_provider": "Bryan County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Bulloch": {"primary_provider": "Bulloch County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Burke": {"primary_provider": "Burke County EMA/EMS", "type": "third_service", "region": 6, "confidence": "high"},
+    "Butts": {"primary_provider": "Butts County Fire Department", "type": "fire_based", "region": 4, "confidence": "high"},
+    "Calhoun": {"primary_provider": "Calhoun County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Camden": {"primary_provider": "Camden County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Candler": {"primary_provider": "Candler County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Carroll": {"primary_provider": "West Georgia Ambulance Service", "type": "private", "region": 4, "confidence": "high"},
+    "Catoosa": {"primary_provider": "Angel EMS (Priority Ambulance)", "type": "private", "region": 1, "confidence": "high"},
+    "Charlton": {"primary_provider": "Charlton County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Chatham": {"primary_provider": "Chatham Emergency Services", "type": "third_service", "region": 9, "confidence": "high"},
+    "Chattahoochee": {"primary_provider": "EMS Care Ambulance", "type": "private", "region": 7, "confidence": "high"},
+    "Chattooga": {"primary_provider": "Atrium Health Floyd EMS / Redmond Regional EMS", "type": "hospital_based", "region": 1, "confidence": "high"},
+    "Cherokee": {"primary_provider": "Cherokee County Fire & Emergency Services", "type": "fire_based", "region": 1, "confidence": "high"},
+    "Clarke": {"primary_provider": "National EMS (Priority Ambulance)", "type": "private", "region": 10, "confidence": "high"},
+    "Clay": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 7, "confidence": "high"},
+    "Clayton": {"primary_provider": "Clayton County Fire & Emergency Services", "type": "fire_based", "region": 3, "confidence": "high"},
+    "Clinch": {"primary_provider": "Gold Star EMS", "type": "private", "region": 9, "confidence": "medium"},
+    "Cobb": {"primary_provider": "MetroAtlanta Ambulance Service / Puckett EMS (dual zone)", "type": "private", "region": 3, "confidence": "high"},
+    "Coffee": {"primary_provider": "Coffee Regional Medical Center EMS", "type": "hospital_based", "region": 9, "confidence": "medium"},
+    "Colquitt": {"primary_provider": "Colquitt County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Columbia": {"primary_provider": "Gold Cross EMS", "type": "private", "region": 6, "confidence": "high"},
+    "Cook": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Coweta": {"primary_provider": "AMR Coweta", "type": "private", "region": 4, "confidence": "high"},
+    "Crawford": {"primary_provider": "Community Ambulance (MGAS Holdings)", "type": "private", "region": 5, "confidence": "high"},
+    "Crisp": {"primary_provider": "Crisp County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Dade": {"primary_provider": "CHI Memorial EMS", "type": "hospital_based", "region": 1, "confidence": "high"},
+    "Dawson": {"primary_provider": "Dawson County Emergency Services", "type": "third_service", "region": 2, "confidence": "high"},
+    "Decatur": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "DeKalb": {"primary_provider": "American Medical Response (AMR)", "type": "private", "region": 3, "confidence": "high"},
+    "Dodge": {"primary_provider": "Dodge County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Dooly": {"primary_provider": "Dooly County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Dougherty": {"primary_provider": "Dougherty County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Douglas": {"primary_provider": "Douglas County Fire/EMS", "type": "fire_based", "region": 3, "confidence": "high"},
+    "Early": {"primary_provider": "LifeBrite EMS", "type": "hospital_based", "region": 8, "confidence": "medium"},
+    "Echols": {"primary_provider": "SGMC Health EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Effingham": {"primary_provider": "Effingham County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Elbert": {"primary_provider": "Elbert County EMS", "type": "third_service", "region": 10, "confidence": "high"},
+    "Emanuel": {"primary_provider": "Emanuel County EMS (Emanuel Medical Center)", "type": "hospital_based", "region": 6, "confidence": "high"},
+    "Evans": {"primary_provider": "Evans County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Fannin": {"primary_provider": "Fannin County Fire and EMS", "type": "fire_based", "region": 1, "confidence": "high"},
+    "Fayette": {"primary_provider": "Fayette County Fire & Emergency Services / AMR Coweta", "type": "fire_based", "region": 4, "confidence": "high"},
+    "Floyd": {"primary_provider": "Atrium Health Floyd EMS", "type": "hospital_based", "region": 1, "confidence": "high"},
+    "Forsyth": {"primary_provider": "Central EMS (Priority Ambulance)", "type": "private", "region": 2, "confidence": "high"},
+    "Franklin": {"primary_provider": "Franklin County EMS", "type": "third_service", "region": 2, "confidence": "high"},
+    "Fulton": {"primary_provider": "Grady EMS (Atlanta/South) / AMR (North Fulton)", "type": "hospital_based", "region": 3, "confidence": "high"},
+    "Gilmer": {"primary_provider": "Gilmer County Fire and EMS", "type": "fire_based", "region": 1, "confidence": "high"},
+    "Glascock": {"primary_provider": "Unknown - small rural county", "type": "unknown", "region": 6, "confidence": "low"},
+    "Glynn": {"primary_provider": "Glynn County Fire Department", "type": "fire_based", "region": 9, "confidence": "high"},
+    "Gordon": {"primary_provider": "Gordon County Ambulance", "type": "third_service", "region": 1, "confidence": "high"},
+    "Grady": {"primary_provider": "Grady County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Greene": {"primary_provider": "Greene County EMS", "type": "third_service", "region": 10, "confidence": "high"},
+    "Gwinnett": {"primary_provider": "Gwinnett County Fire & Emergency Services", "type": "fire_based", "region": 3, "confidence": "high"},
+    "Habersham": {"primary_provider": "Habersham County Emergency Services", "type": "third_service", "region": 2, "confidence": "high"},
+    "Hall": {"primary_provider": "Hall County Fire Services", "type": "fire_based", "region": 2, "confidence": "high"},
+    "Hancock": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Haralson": {"primary_provider": "Ambucare (Priority Ambulance)", "type": "private", "region": 1, "confidence": "high"},
+    "Harris": {"primary_provider": "Harris County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "Hart": {"primary_provider": "Hart County EMS", "type": "third_service", "region": 2, "confidence": "high"},
+    "Heard": {"primary_provider": "Heard County EMA/EMS", "type": "third_service", "region": 4, "confidence": "high"},
+    "Henry": {"primary_provider": "Henry County Fire Department", "type": "fire_based", "region": 4, "confidence": "high"},
+    "Houston": {"primary_provider": "Emory Healthcare EMS", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Irwin": {"primary_provider": "Irwin County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Jackson": {"primary_provider": "Jackson County EMS", "type": "third_service", "region": 10, "confidence": "high"},
+    "Jasper": {"primary_provider": "Jasper County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Jeff Davis": {"primary_provider": "Jeff Davis County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Jefferson": {"primary_provider": "Gold Cross EMS", "type": "private", "region": 6, "confidence": "high"},
+    "Jenkins": {"primary_provider": "Jenkins County Ambulance Service", "type": "third_service", "region": 6, "confidence": "high"},
+    "Johnson": {"primary_provider": "Johnson County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Jones": {"primary_provider": "Atrium Health Navicent EMS", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Lamar": {"primary_provider": "Community Ambulance (MGAS Holdings)", "type": "private", "region": 4, "confidence": "high"},
+    "Lanier": {"primary_provider": "SGMC Health EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Laurens": {"primary_provider": "Laurens County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Lee": {"primary_provider": "Lee County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Liberty": {"primary_provider": "Liberty Regional EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Lincoln": {"primary_provider": "Lincoln County OES/EMS", "type": "third_service", "region": 6, "confidence": "high"},
+    "Long": {"primary_provider": "Excelsior Ambulance", "type": "private", "region": 9, "confidence": "medium"},
+    "Lowndes": {"primary_provider": "SGMC Health EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Lumpkin": {"primary_provider": "Lumpkin County Emergency Services", "type": "third_service", "region": 2, "confidence": "high"},
+    "Macon": {"primary_provider": "Macon County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "Madison": {"primary_provider": "Madison County EMS", "type": "third_service", "region": 10, "confidence": "high"},
+    "Marion": {"primary_provider": "Marion County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "McDuffie": {"primary_provider": "McDuffie County EMS", "type": "third_service", "region": 6, "confidence": "high"},
+    "McIntosh": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 9, "confidence": "high"},
+    "Meriwether": {"primary_provider": "Meriwether County EMS / AMR Coweta", "type": "third_service", "region": 4, "confidence": "high"},
+    "Miller": {"primary_provider": "Colquitt/Miller County Fire/EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Mitchell": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Monroe": {"primary_provider": "Monroe County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Montgomery": {"primary_provider": "Toombs-Montgomery EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Morgan": {"primary_provider": "National EMS (Priority Ambulance)", "type": "private", "region": 10, "confidence": "high"},
+    "Murray": {"primary_provider": "Murray EMS", "type": "third_service", "region": 1, "confidence": "high"},
+    "Muscogee": {"primary_provider": "Columbus Fire & EMS / EMS Care Ambulance / Community Ambulance (multi-provider)", "type": "fire_based", "region": 7, "confidence": "high"},
+    "Newton": {"primary_provider": "National EMS / Central EMS (Priority Ambulance)", "type": "private", "region": 3, "confidence": "high"},
+    "Oconee": {"primary_provider": "National EMS (Priority Ambulance)", "type": "private", "region": 10, "confidence": "high"},
+    "Oglethorpe": {"primary_provider": "Oglethorpe County EMS", "type": "third_service", "region": 10, "confidence": "high"},
+    "Paulding": {"primary_provider": "MetroAtlanta Ambulance Service", "type": "private", "region": 1, "confidence": "high"},
+    "Peach": {"primary_provider": "Peach County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Pickens": {"primary_provider": "Pickens County EMS", "type": "third_service", "region": 1, "confidence": "high"},
+    "Pierce": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 9, "confidence": "high"},
+    "Pike": {"primary_provider": "Veterans Medical Transport / Grady EMS", "type": "private", "region": 4, "confidence": "medium"},
+    "Polk": {"primary_provider": "Redmond Regional EMS", "type": "hospital_based", "region": 1, "confidence": "high"},
+    "Pulaski": {"primary_provider": "Heartland EMS / Taylor Regional Hospital EMS", "type": "hospital_based", "region": 5, "confidence": "medium"},
+    "Putnam": {"primary_provider": "Putnam County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Quitman": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 7, "confidence": "high"},
+    "Rabun": {"primary_provider": "Rabun County EMS", "type": "third_service", "region": 2, "confidence": "high"},
+    "Randolph": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 7, "confidence": "high"},
+    "Richmond": {"primary_provider": "Central EMS (Priority Ambulance)", "type": "private", "region": 6, "confidence": "high"},
+    "Rockdale": {"primary_provider": "National EMS (Priority Ambulance)", "type": "private", "region": 3, "confidence": "high"},
+    "Schley": {"primary_provider": "Schley County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "Screven": {"primary_provider": "Screven County EMS", "type": "third_service", "region": 6, "confidence": "high"},
+    "Seminole": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"},
+    "Spalding": {"primary_provider": "WellStar Spalding EMS", "type": "hospital_based", "region": 4, "confidence": "high"},
+    "Stephens": {"primary_provider": "Stephens County EMS (Hospital Authority)", "type": "hospital_based", "region": 2, "confidence": "high"},
+    "Stewart": {"primary_provider": "Stewart County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "Sumter": {"primary_provider": "Gold Star EMS", "type": "private", "region": 8, "confidence": "medium"},
+    "Talbot": {"primary_provider": "Talbot County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "Taliaferro": {"primary_provider": "Unknown - smallest county in Georgia by population", "type": "unknown", "region": 6, "confidence": "low"},
+    "Tattnall": {"primary_provider": "Tattnall County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Taylor": {"primary_provider": "Taylor County EMS", "type": "third_service", "region": 7, "confidence": "high"},
+    "Telfair": {"primary_provider": "Telfair County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Terrell": {"primary_provider": "Terrell County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Thomas": {"primary_provider": "Thomas County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Tift": {"primary_provider": "Tift County Fire and Rescue", "type": "fire_based", "region": 8, "confidence": "high"},
+    "Toombs": {"primary_provider": "Toombs-Montgomery EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Towns": {"primary_provider": "Towns County EMS", "type": "third_service", "region": 2, "confidence": "high"},
+    "Treutlen": {"primary_provider": "Atrium Health Navicent EMS", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Troup": {"primary_provider": "American Medical Response (AMR)", "type": "private", "region": 4, "confidence": "high"},
+    "Turner": {"primary_provider": "Turner County EMS", "type": "third_service", "region": 8, "confidence": "high"},
+    "Twiggs": {"primary_provider": "Atrium Health Navicent EMS", "type": "hospital_based", "region": 5, "confidence": "high"},
+    "Union": {"primary_provider": "Union County EMS", "type": "third_service", "region": 2, "confidence": "high"},
+    "Upson": {"primary_provider": "Community Ambulance (MGAS Holdings)", "type": "private", "region": 4, "confidence": "high"},
+    "Walker": {"primary_provider": "CHI Memorial EMS", "type": "hospital_based", "region": 1, "confidence": "high"},
+    "Walton": {"primary_provider": "Walton County EMS", "type": "third_service", "region": 10, "confidence": "high"},
+    "Ware": {"primary_provider": "Ware County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Warren": {"primary_provider": "Warren County EMS", "type": "third_service", "region": 6, "confidence": "high"},
+    "Washington": {"primary_provider": "Washington County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Wayne": {"primary_provider": "Wayne County EMS", "type": "third_service", "region": 9, "confidence": "high"},
+    "Webster": {"primary_provider": "Webster County Fire/EMS", "type": "fire_based", "region": 7, "confidence": "high"},
+    "Wheeler": {"primary_provider": "Wheeler County Ambulance Service", "type": "third_service", "region": 5, "confidence": "high"},
+    "White": {"primary_provider": "NE Georgia Physicians Group EMS", "type": "hospital_based", "region": 2, "confidence": "high"},
+    "Whitfield": {"primary_provider": "Hamilton Emergency Medical Services (HEMS)", "type": "private", "region": 1, "confidence": "high"},
+    "Wilcox": {"primary_provider": "Wilcox County EMS", "type": "third_service", "region": 5, "confidence": "high"},
+    "Wilkes": {"primary_provider": "Wilkes County EMS", "type": "third_service", "region": 6, "confidence": "high"},
+    "Wilkinson": {"primary_provider": "Heartland EMS / Wilkinson County Ambulance", "type": "third_service", "region": 5, "confidence": "high"},
+    "Worth": {"primary_provider": "Grady EMS", "type": "hospital_based", "region": 8, "confidence": "high"}
+  },
+  "athens_area_detail": {
+    "description": "Athens-Clarke County and surrounding counties in northeast Georgia (EMS Region 10). National EMS (Priority Ambulance) is the dominant private 911 provider in the immediate Athens area.",
+    "counties": {
+      "Clarke": {
+        "primary_provider": "National EMS (Priority Ambulance)",
+        "type": "private",
+        "notes": "Contracted 911 provider for Athens-Clarke County. CAAS accredited since 1983. UGA Athletic Association preferred provider.",
+        "confidence": "high"
+      },
+      "Oconee": {
+        "primary_provider": "National EMS (Priority Ambulance)",
+        "type": "private",
+        "notes": "National EMS holds 911 contract for Oconee County.",
+        "confidence": "high"
+      },
+      "Morgan": {
+        "primary_provider": "National EMS (Priority Ambulance)",
+        "type": "private",
+        "notes": "National EMS partners with Morgan County for 911 ambulance service.",
+        "confidence": "high"
+      },
+      "Oglethorpe": {
+        "primary_provider": "Oglethorpe County EMS",
+        "type": "third_service",
+        "ambulance_count": 3,
+        "notes": "County-operated EMS. Small rural county east of Athens.",
+        "confidence": "high"
+      },
+      "Madison": {
+        "primary_provider": "Madison County EMS",
+        "type": "third_service",
+        "ambulance_count": 8,
+        "notes": "County-operated EMS north of Athens.",
+        "confidence": "high"
+      },
+      "Jackson": {
+        "primary_provider": "Jackson County EMS",
+        "type": "third_service",
+        "ambulance_count": 13,
+        "notes": "County-run EMS. 7 ALS ambulances. 95%+ paramedic staffing. Northwest of Athens.",
+        "confidence": "high"
+      },
+      "Barrow": {
+        "primary_provider": "Barrow County Fire and EMS / NE Georgia Physicians Group",
+        "type": "fire_based",
+        "ambulance_count": 11,
+        "notes": "Fire-based EMS with public-private partnership through NGMC/Northeast Georgia Physicians Group. West of Athens.",
+        "confidence": "high"
+      },
+      "Walton": {
+        "primary_provider": "Walton County EMS",
+        "type": "third_service",
+        "ambulance_count": 9,
+        "notes": "County-run EMS. 6 ambulances 24/7 + 2 reserve. Southwest of Athens.",
+        "confidence": "high"
+      },
+      "Greene": {
+        "primary_provider": "Greene County EMS",
+        "type": "third_service",
+        "ambulance_count": 8,
+        "notes": "County-run EMS. 3 stations. Southeast of Athens.",
+        "confidence": "high"
+      },
+      "Elbert": {
+        "primary_provider": "Elbert County EMS",
+        "type": "third_service",
+        "ambulance_count": 7,
+        "notes": "County-run EMS. East of Athens near SC border.",
+        "confidence": "high"
+      }
+    }
+  },
+  "ems_regions": {
+    "1": {
+      "name": "Northwest Georgia",
+      "director": "Lanier Swafford",
+      "counties": ["Bartow", "Catoosa", "Chattooga", "Cherokee", "Dade", "Fannin", "Floyd", "Gilmer", "Gordon", "Haralson", "Murray", "Paulding", "Pickens", "Polk", "Walker", "Whitfield"]
+    },
+    "2": {
+      "name": "Northeast Georgia",
+      "director": "Melody Hardwick",
+      "counties": ["Banks", "Dawson", "Forsyth", "Franklin", "Habersham", "Hall", "Hart", "Lumpkin", "Rabun", "Stephens", "Towns", "Union", "White"]
+    },
+    "3": {
+      "name": "Metro Atlanta",
+      "director": "Vincent Harris",
+      "counties": ["Clayton", "Cobb", "DeKalb", "Douglas", "Fulton", "Gwinnett", "Newton", "Rockdale"]
+    },
+    "4": {
+      "name": "West Central (LaGrange)",
+      "director": "Michelle Archer",
+      "counties": ["Butts", "Carroll", "Coweta", "Fayette", "Heard", "Henry", "Lamar", "Meriwether", "Pike", "Spalding", "Troup", "Upson"]
+    },
+    "5": {
+      "name": "Central Georgia",
+      "counties": ["Baldwin", "Bibb", "Bleckley", "Crawford", "Dodge", "Hancock", "Houston", "Jasper", "Johnson", "Jones", "Laurens", "Monroe", "Montgomery", "Peach", "Pulaski", "Putnam", "Telfair", "Treutlen", "Twiggs", "Washington", "Wheeler", "Wilcox", "Wilkinson"]
+    },
+    "6": {
+      "name": "East Central Georgia (Augusta)",
+      "counties": ["Burke", "Columbia", "Emanuel", "Glascock", "Jefferson", "Jenkins", "Lincoln", "McDuffie", "Richmond", "Screven", "Taliaferro", "Warren", "Wilkes"]
+    },
+    "7": {
+      "name": "West Central Georgia (Columbus)",
+      "counties": ["Chattahoochee", "Clay", "Harris", "Macon", "Marion", "Muscogee", "Quitman", "Randolph", "Schley", "Stewart", "Talbot", "Taylor", "Webster"]
+    },
+    "8": {
+      "name": "South Georgia",
+      "counties": ["Baker", "Ben Hill", "Berrien", "Brooks", "Calhoun", "Colquitt", "Cook", "Crisp", "Decatur", "Dooly", "Dougherty", "Early", "Echols", "Grady", "Irwin", "Lanier", "Lee", "Lowndes", "Miller", "Mitchell", "Seminole", "Sumter", "Terrell", "Thomas", "Tift", "Turner", "Worth"]
+    },
+    "9": {
+      "name": "Coastal Georgia",
+      "counties": ["Appling", "Atkinson", "Bacon", "Brantley", "Bryan", "Bulloch", "Camden", "Candler", "Charlton", "Chatham", "Clinch", "Coffee", "Effingham", "Evans", "Glynn", "Jeff Davis", "Liberty", "Long", "McIntosh", "Pierce", "Tattnall", "Toombs", "Ware", "Wayne"]
+    },
+    "10": {
+      "name": "Northeast Georgia (Athens)",
+      "counties": ["Barrow", "Clarke", "Elbert", "Greene", "Jackson", "Madison", "Morgan", "Oconee", "Oglethorpe", "Walton"]
+    }
+  },
+  "summary_stats": {
+    "counties_with_identified_provider": 157,
+    "counties_unknown": 2,
+    "unknown_counties": ["Glascock", "Taliaferro"],
+    "total_agencies_listed": 110,
+    "provider_type_breakdown": {
+      "third_service_county_run": 72,
+      "fire_based": 22,
+      "hospital_based": 18,
+      "private_contracted": 20
+    },
+    "major_private_providers": [
+      "Priority Ambulance (Central EMS, National EMS, Puckett EMS, Ambucare, Angel EMS) - ~20 counties",
+      "AMR (Global Medical Response) - 6 counties",
+      "MetroAtlanta Ambulance Service - 3 counties",
+      "Grady EMS (Grady Health System) - 17+ counties",
+      "Community Ambulance (MGAS Holdings) - 5 counties",
+      "Gold Cross EMS - 2 counties",
+      "AmeriPro Health - 9 counties",
+      "Hamilton EMS (Vitruvian Health) - 1 county"
+    ],
+    "total_ambulances_statewide_approx": 1472,
+    "notes": "Ambulance counts from FY2021 GTCNC grant. Some counties have multiple providers operating in zones or with mutual aid agreements. Grady EMS is the single largest fleet operator (~150 ambulances across all service areas)."
+  }
+}

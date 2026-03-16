@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>911 EMS Coverage Map - Who Transports When You Call 911?</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; }
+#map { height: 100vh; width: 100%; }
+
+.header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 1000;
+  background: linear-gradient(180deg, rgba(13,17,23,0.95) 0%, rgba(13,17,23,0.8) 70%, transparent 100%);
+  padding: 20px 30px 40px; pointer-events: none;
+}
+.header > * { pointer-events: auto; }
+.header h1 { font-size: 22px; color: #fff; font-weight: 700; margin-bottom: 4px; }
+.header .tagline { font-size: 14px; color: #8b949e; margin-bottom: 12px; }
+.header .stats { font-size: 12px; color: #58a6ff; }
+
+.sidebar {
+  position: absolute; top: 10px; right: 10px; z-index: 1001;
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4); width: 300px; max-height: calc(100vh - 20px); overflow-y: auto;
+}
+.sidebar h3 { padding: 14px 16px 8px; font-size: 14px; color: #fff; }
+.state-list { list-style: none; padding: 0 8px 8px; }
+.state-item {
+  padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 2px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.15s; font-size: 13px;
+}
+.state-item:hover { background: #21262d; }
+.state-item .name { color: #c9d1d9; font-weight: 500; }
+.state-item .badge {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+.badge-live { background: #238636; color: #fff; }
+.badge-soon { background: #30363d; color: #8b949e; }
+
+.legend-box { padding: 12px 16px; border-top: 1px solid #30363d; }
+.legend-box h4 { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 4px; color: #c9d1d9; }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+.info-box { padding: 12px 16px; border-top: 1px solid #30363d; font-size: 11px; color: #8b949e; line-height: 1.5; }
+.info-box a { color: #58a6ff; text-decoration: none; }
+
+.popup-card h3 { font-size: 15px; margin-bottom: 6px; }
+.popup-card .detail { font-size: 12px; color: #555; margin-bottom: 3px; }
+.popup-card .cta { display: inline-block; margin-top: 8px; padding: 4px 12px; background: #238636; color: #fff; border-radius: 4px; font-size: 12px; text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div class="header">
+  <h1>911 EMS Coverage Map</h1>
+  <div class="tagline">Who transports when you call 911? The map no one has built.</div>
+  <div class="stats" id="stats">Loading...</div>
+</div>
+
+<div class="sidebar">
+  <h3>States</h3>
+  <ul class="state-list" id="state-list"></ul>
+  <div class="legend-box">
+    <h4>Map Colors</h4>
+    <div class="legend-row"><div class="legend-dot" style="background:#238636"></div> Detailed coverage data</div>
+    <div class="legend-row"><div class="legend-dot" style="background:#30363d"></div> Coming soon</div>
+  </div>
+  <div class="info-box">
+    Built for EMS professionals looking for 911 transport jobs. No one has mapped
+    who actually runs 911 ambulance service for every area in the US.
+    <br><br>
+    Data sourced from state EMS registries, fire district GIS boundaries, RETAC regions,
+    and agency websites. <a href="contribute.html">Report an error or add your state</a>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// States with data
+const STATE_DATA = {
+  'Colorado': {
+    status: 'live',
+    url: 'colorado.html',
+    agencies: 108,
+    counties: 64,
+    districts: 267,
+    notes: 'Real fire district boundaries from CO DOLA. 243 fire + 10 ambulance + 14 municipal.',
+  },
+  'Georgia': {
+    status: 'live',
+    url: 'georgia.html',
+    agencies: 134,
+    counties: 159,
+    districts: 159,
+    notes: 'County-level coverage + Athens-Clarke fire districts. 71 ACC fire sub-zones.',
+  },
+};
+
+const COMING_SOON = [
+  'Texas', 'California', 'Florida', 'New York', 'Pennsylvania', 'Ohio',
+  'North Carolina', 'Arizona', 'Tennessee', 'Virginia',
+];
+
+const map = L.map('map', { zoomControl: false }).setView([39.5, -98.5], 4);
+
+L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+}).addTo(map);
+
+fetch('data/us-states.geojson')
+  .then(r => r.json())
+  .then(states => {
+    let totalAgencies = 0;
+    let totalCounties = 0;
+    let liveStates = 0;
+
+    states.features.forEach(f => {
+      const name = f.properties.name || f.properties.NAME;
+      const data = STATE_DATA[name];
+      const isLive = data && data.status === 'live';
+
+      if (isLive) {
+        totalAgencies += data.agencies;
+        totalCounties += data.counties;
+        liveStates++;
+      }
+
+      const lyr = L.geoJSON(f, {
+        style: {
+          fillColor: isLive ? '#238636' : '#21262d',
+          fillOpacity: isLive ? 0.6 : 0.3,
+          color: isLive ? '#3fb950' : '#30363d',
+          weight: isLive ? 2 : 1,
+          opacity: 0.8,
+        }
+      }).addTo(map);
+
+      if (isLive) {
+        lyr.bindPopup(`
+          <div class="popup-card">
+            <h3>${name}</h3>
+            <div class="detail"><strong>${data.agencies}</strong> agencies mapped</div>
+            <div class="detail"><strong>${data.counties}</strong> counties covered</div>
+            <div class="detail"><strong>${data.districts}</strong> district boundaries</div>
+            <div class="detail">${data.notes}</div>
+            <a class="cta" href="${data.url}">View ${name} Map</a>
+          </div>
+        `);
+
+        lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.8, weight: 3 }); });
+        lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.6, weight: 2 }); });
+        lyr.on('click', function(e) {
+          // Also allow double-click to navigate directly
+        });
+        lyr.on('dblclick', function() {
+          window.location.href = data.url;
+        });
+      } else {
+        lyr.bindPopup(`
+          <div class="popup-card">
+            <h3>${name}</h3>
+            <div class="detail">Coverage data coming soon.</div>
+            <div class="detail" style="color:#8b949e">Know the EMS landscape here? Help us map it.</div>
+          </div>
+        `);
+        lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.45, weight: 1.5 }); });
+        lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.3, weight: 1 }); });
+      }
+    });
+
+    // Stats
+    document.getElementById('stats').textContent =
+      `${liveStates} states mapped | ${totalAgencies} agencies | ${totalCounties} counties | 50 states to go`;
+
+    // State list
+    renderStateList();
+  });
+
+function renderStateList() {
+  const list = document.getElementById('state-list');
+  let html = '';
+
+  // Live states first
+  for (const [name, data] of Object.entries(STATE_DATA)) {
+    html += `<li class="state-item" onclick="window.location='${data.url}'">
+      <span class="name">${name}</span>
+      <span class="badge badge-live">${data.agencies} agencies</span>
+    </li>`;
+  }
+
+  // Coming soon
+  COMING_SOON.forEach(name => {
+    html += `<li class="state-item" style="opacity:0.5;cursor:default">
+      <span class="name">${name}</span>
+      <span class="badge badge-soon">coming soon</span>
+    </li>`;
+  });
+
+  list.innerHTML = html;
+}
+</script>
+</body>
+</html>

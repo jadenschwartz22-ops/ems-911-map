@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Georgia 911 EMS Transport Coverage Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+#map { height: 100vh; width: 100%; }
+.sidebar {
+  position: absolute; top: 10px; right: 10px; z-index: 1000;
+  background: #fff; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  width: 340px; max-height: calc(100vh - 20px); overflow-y: auto;
+}
+.sidebar h2 { padding: 14px 16px 6px; font-size: 16px; }
+.sidebar .subtitle { padding: 0 16px 12px; font-size: 12px; color: #888; border-bottom: 1px solid #eee; }
+.search-bar { padding: 8px 16px; border-bottom: 1px solid #eee; }
+.search-bar input {
+  width: 100%; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none;
+}
+.nav-links { padding: 8px 16px; border-bottom: 1px solid #eee; font-size: 12px; }
+.nav-links a { color: #3498db; text-decoration: none; margin-right: 12px; }
+.nav-links a.active { font-weight: 600; color: #333; }
+.zoom-btns { padding: 8px 16px; border-bottom: 1px solid #eee; display: flex; gap: 6px; flex-wrap: wrap; }
+.zoom-btn {
+  padding: 4px 10px; border: 1px solid #ddd; border-radius: 4px;
+  background: #fff; font-size: 11px; cursor: pointer;
+}
+.zoom-btn:hover { background: #f0f0f0; }
+.legend { padding: 10px 16px; }
+.legend-section { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin: 10px 0 4px; }
+.legend-item { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; font-size: 12px; border-radius: 3px; }
+.legend-item:hover { background: #f5f5f5; }
+.legend-swatch { width: 14px; height: 10px; border-radius: 2px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1); }
+.legend-label { font-weight: 500; }
+.legend-sub { font-size: 10px; color: #999; }
+.footer { padding: 10px 16px; font-size: 10px; color: #aaa; border-top: 1px solid #eee; line-height: 1.4; }
+.district-label span {
+  font-size: 9px; font-weight: 600; color: #fff; white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px #000; pointer-events: none;
+}
+.info-popup h3 { margin: 0 0 6px; font-size: 14px; }
+.info-popup .row { font-size: 12px; color: #444; margin-bottom: 3px; }
+.info-popup .row strong { color: #222; }
+.info-popup .notes { font-size: 11px; color: #666; margin-top: 6px; font-style: italic; }
+.uga-label {
+  font-size: 11px; font-weight: 700; color: #fff; background: #ba0c2f;
+  padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4); border: 2px solid #fff;
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="sidebar">
+  <h2>Georgia 911 EMS Coverage</h2>
+  <div class="subtitle">159 counties + Athens-Clarke fire districts. Click any area.</div>
+  <div class="nav-links">
+    <a href="index.html">US Map</a>
+    <a href="colorado.html">Colorado</a>
+    <a href="georgia.html" class="active">Georgia</a>
+    <a href="contribute.html" style="color:#e67e22">Report Error</a>
+  </div>
+  <div class="zoom-btns">
+    <button class="zoom-btn" data-lat="33.948" data-lng="-83.377" data-z="14">UGA Law</button>
+    <button class="zoom-btn" data-lat="33.96" data-lng="-83.38" data-z="12">Athens</button>
+    <button class="zoom-btn" data-lat="33.88" data-lng="-83.50" data-z="10">Athens Region</button>
+    <button class="zoom-btn" data-lat="33.76" data-lng="-84.39" data-z="10">Atlanta Metro</button>
+    <button class="zoom-btn" data-lat="32.7" data-lng="-83.5" data-z="7">Statewide</button>
+  </div>
+  <div class="search-bar"><input type="text" id="search" placeholder="Search county or agency..."></div>
+  <div class="legend" id="legend"></div>
+  <div class="footer">
+    County boundaries from Census TIGER. Athens-Clarke fire districts from ACC GIS.
+    134 EMS agencies across all 159 counties. GA EMS is primarily county-based.
+    Athens 911 transport: National EMS (Priority Ambulance).
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const TYPE_COLORS = {
+  third_service: '#1abc9c', fire_based: '#e74c3c', private: '#f39c12',
+  hospital_based: '#3498db', unknown: '#95a5a6',
+};
+const TYPE_LABELS = {
+  third_service: 'County EMS', fire_based: 'Fire Dept', private: 'Private',
+  hospital_based: 'Hospital-Based', unknown: 'Unknown',
+};
+
+// Athens fire station colors (10 stations)
+const STATION_COLORS = {
+  '1': '#e74c3c', '2': '#3498db', '3': '#2ecc71', '4': '#f39c12', '5': '#9b59b6',
+  '6': '#1abc9c', '7': '#e67e22', '8': '#c0392b', '9': '#2980b9', '10': '#27ae60',
+};
+
+const ATHENS_COUNTIES = ['Clarke', 'Oconee', 'Oglethorpe', 'Madison', 'Jackson', 'Barrow', 'Walton', 'Morgan', 'Greene', 'Elbert'];
+
+const map = L.map('map').setView([33.96, -83.38], 12);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+}).addTo(map);
+
+let countyLyrs = {};
+
+Promise.all([
+  fetch('data/ga-state-simple.geojson').then(r => r.json()),
+  fetch('data/ga-counties-simple.geojson').then(r => r.json()),
+  fetch('data/ga-places-simple.geojson').then(r => r.json()),
+  fetch('data/georgia-statewide.json').then(r => r.json()),
+  fetch('data/athens-fire-districts-simple.geojson').then(r => r.json()),
+]).then(([state, counties, places, agencyData, athensDistricts]) => {
+  const cc = agencyData.county_coverage;
+
+  // State outline
+  L.geoJSON(state, {
+    style: { fillColor: 'transparent', fillOpacity: 0, color: '#fff', weight: 1.5, opacity: 0.2 }
+  }).addTo(map);
+
+  // Counties
+  counties.features.forEach(f => {
+    const rawName = f.properties.NAME || '';
+    const name = rawName.replace(' County', '');
+    const info = cc[name];
+    if (!info) return;
+
+    const color = TYPE_COLORS[info.type] || '#95a5a6';
+    const isAthens = ATHENS_COUNTIES.includes(name);
+
+    const lyr = L.geoJSON(f, {
+      style: {
+        fillColor: color,
+        fillOpacity: isAthens ? 0.45 : 0.4,
+        color: isAthens ? '#fff' : '#333',
+        weight: isAthens ? 2 : 0.8,
+        opacity: isAthens ? 0.8 : 0.4,
+      }
+    }).addTo(map);
+
+    lyr.bindPopup(`
+      <div class="info-popup">
+        <h3>${name} County</h3>
+        <div class="row"><strong>911 Transport:</strong> ${info.primary_provider}</div>
+        <div class="row"><strong>Type:</strong> ${TYPE_LABELS[info.type] || info.type}</div>
+        <div class="row"><strong>EMS Region:</strong> ${info.region}</div>
+      </div>
+    `);
+
+    lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.7, weight: 2 }); });
+    lyr.on('mouseout', function() { this.setStyle({ fillOpacity: isAthens ? 0.45 : 0.4, weight: isAthens ? 2 : 0.8 }); });
+
+    countyLyrs[name] = lyr;
+  });
+
+  // Athens-Clarke County fire districts (detailed overlay)
+  const athensLabelGroup = L.layerGroup();
+  const athensDistrictGroup = L.layerGroup().addTo(map);
+
+  athensDistricts.features.forEach(f => {
+    const firedist = f.properties.FIREDIST || '';
+    const stationNum = firedist.replace('F', '').replace(/[A-Z]$/, '');
+    const subZone = firedist.slice(-1);
+    const color = STATION_COLORS[stationNum] || '#95a5a6';
+    const minutes = f.properties.Minutes || '?';
+    const seconds = f.properties.Seconds || '?';
+
+    const lyr = L.geoJSON(f, {
+      style: {
+        fillColor: color,
+        fillOpacity: 0.5,
+        color: '#fff',
+        weight: 1,
+        opacity: 0.7,
+      }
+    });
+
+    lyr.bindPopup(`
+      <div class="info-popup">
+        <h3>Athens-Clarke Fire District ${firedist}</h3>
+        <div class="row"><strong>Station:</strong> ${stationNum}</div>
+        <div class="row"><strong>Sub-zone:</strong> ${subZone}</div>
+        <div class="row"><strong>Avg Response:</strong> ${minutes}m ${seconds}s</div>
+        <div class="row"><strong>911 Transport:</strong> National EMS (Priority Ambulance)</div>
+        <div class="notes">ACC Fire Rescue provides first response. National EMS handles ambulance transport.</div>
+      </div>
+    `);
+
+    lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.75, weight: 2 }); });
+    lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.5, weight: 1 }); });
+
+    lyr.addTo(athensDistrictGroup);
+
+    // Label
+    const bounds = lyr.getBounds();
+    const center = bounds.getCenter();
+    L.marker(center, {
+      icon: L.divIcon({ className: 'district-label', html: `<span>${firedist}</span>`, iconSize: null })
+    }).addTo(athensLabelGroup);
+  });
+
+  // Show Athens detail layers based on zoom
+  function updateAthensLayers() {
+    const z = map.getZoom();
+    if (z >= 12) {
+      if (!map.hasLayer(athensDistrictGroup)) athensDistrictGroup.addTo(map);
+      if (z >= 13 && !map.hasLayer(athensLabelGroup)) athensLabelGroup.addTo(map);
+      if (z < 13 && map.hasLayer(athensLabelGroup)) map.removeLayer(athensLabelGroup);
+    } else {
+      if (map.hasLayer(athensDistrictGroup)) map.removeLayer(athensDistrictGroup);
+      if (map.hasLayer(athensLabelGroup)) map.removeLayer(athensLabelGroup);
+    }
+  }
+  map.on('zoomend', updateAthensLayers);
+  updateAthensLayers();
+
+  // City boundaries overlay
+  const CITY_EMS = {
+    'Athens-Clarke County unified government (balance)': { agency: 'National EMS (Priority Ambulance)', county: 'Clarke', color: '#f39c12', outline: true },
+    'Watkinsville city': { agency: 'National EMS (Priority Ambulance)', county: 'Oconee', color: '#f39c12' },
+    'Winder city': { agency: 'Barrow County Fire/EMS', county: 'Barrow', color: '#e74c3c' },
+    'Monroe city': { agency: 'Walton County EMS', county: 'Walton', color: '#1abc9c' },
+    'Madison city': { agency: 'National EMS (Priority Ambulance)', county: 'Morgan', color: '#f39c12' },
+    'Elberton city': { agency: 'Elbert County EMS', county: 'Elbert', color: '#1abc9c' },
+    'Winterville city': { agency: 'National EMS (Priority Ambulance)', county: 'Clarke', color: '#f39c12' },
+    'Bogart town': { agency: 'National EMS (Priority Ambulance)', county: 'Oconee/Clarke', color: '#f39c12' },
+    'Statham city': { agency: 'Barrow County Fire/EMS', county: 'Barrow', color: '#e74c3c' },
+    'Jefferson city': { agency: 'Jackson County EMS', county: 'Jackson', color: '#1abc9c' },
+    'Commerce city': { agency: 'Jackson County EMS', county: 'Jackson', color: '#1abc9c' },
+    'Danielsville city': { agency: 'Madison County EMS', county: 'Madison', color: '#1abc9c' },
+    'Greensboro city': { agency: 'Greene County EMS', county: 'Greene', color: '#1abc9c' },
+    'Crawford city': { agency: 'Oglethorpe County EMS', county: 'Oglethorpe', color: '#1abc9c' },
+    // Atlanta metro
+    'Atlanta city': { agency: 'Grady EMS', county: 'Fulton', color: '#3498db' },
+    'Savannah city': { agency: 'Chatham Emergency Services', county: 'Chatham', color: '#1abc9c' },
+    'Augusta-Richmond County consolidated government (balance)': { agency: 'Central EMS (Priority Ambulance)', county: 'Richmond', color: '#f39c12' },
+    'Columbus city': { agency: 'Columbus Fire & EMS', county: 'Muscogee', color: '#e74c3c' },
+    'Macon-Bibb County': { agency: 'Atrium Health Navicent EMS', county: 'Bibb', color: '#3498db' },
+    'Albany city': { agency: 'Dougherty County EMS', county: 'Dougherty', color: '#1abc9c' },
+    'Valdosta city': { agency: 'SGMC Health EMS', county: 'Lowndes', color: '#3498db' },
+    'Marietta city': { agency: 'MetroAtlanta Ambulance', county: 'Cobb', color: '#f39c12' },
+    'Roswell city': { agency: 'AMR (North Fulton)', county: 'Fulton', color: '#e67e22' },
+    'Decatur city': { agency: 'AMR', county: 'DeKalb', color: '#e67e22' },
+    'Gainesville city': { agency: 'Hall County Fire Services', county: 'Hall', color: '#e74c3c' },
+    'Dalton city': { agency: 'Hamilton EMS', county: 'Whitfield', color: '#f39c12' },
+    'Rome city': { agency: 'Atrium Health Floyd EMS', county: 'Floyd', color: '#3498db' },
+    'Brunswick city': { agency: 'Glynn County Fire Dept', county: 'Glynn', color: '#e74c3c' },
+    'Warner Robins city': { agency: 'Emory Healthcare EMS', county: 'Houston', color: '#3498db' },
+    'Lawrenceville city': { agency: 'Gwinnett County Fire', county: 'Gwinnett', color: '#e74c3c' },
+  };
+
+  const cityLabelGroup = L.layerGroup();
+  const cityBoundaryGroup = L.layerGroup().addTo(map);
+
+  places.features.forEach(f => {
+    const pname = f.properties.NAME || '';
+    const info = CITY_EMS[pname];
+    if (!info) return;
+
+    const isAthensOutline = info.outline;
+    const cleanName = pname.replace(/ (city|town|CDP)$/i, '')
+      .replace(' unified government (balance)', '')
+      .replace(' consolidated government (balance)', '')
+      .replace('Macon-Bibb County', 'Macon')
+      .replace('Augusta-Richmond County', 'Augusta');
+
+    const lyr = L.geoJSON(f, {
+      style: isAthensOutline ? {
+        fillColor: 'transparent', fillOpacity: 0, color: '#f1c40f', weight: 3, opacity: 0.8, dashArray: '8 4'
+      } : {
+        fillColor: info.color, fillOpacity: 0.55, color: '#fff', weight: 1.5, opacity: 0.8,
+      }
+    });
+
+    lyr.bindPopup(`
+      <div class="info-popup">
+        <h3>${cleanName}</h3>
+        <div class="row"><strong>911 Transport:</strong> ${info.agency}</div>
+        <div class="row"><strong>County:</strong> ${info.county}</div>
+      </div>
+    `);
+
+    if (!isAthensOutline) {
+      lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.8, weight: 2.5 }); });
+      lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.55, weight: 1.5 }); });
+    }
+
+    lyr.addTo(cityBoundaryGroup);
+
+    // City label
+    const bounds = lyr.getBounds();
+    L.marker(bounds.getCenter(), {
+      icon: L.divIcon({ className: 'district-label', html: `<span>${cleanName}</span>`, iconSize: null })
+    }).addTo(cityLabelGroup);
+  });
+
+  // Show city labels at zoom 10+
+  function updateCityLabels() {
+    if (map.getZoom() >= 10) {
+      if (!map.hasLayer(cityLabelGroup)) cityLabelGroup.addTo(map);
+    } else {
+      if (map.hasLayer(cityLabelGroup)) map.removeLayer(cityLabelGroup);
+    }
+  }
+  map.on('zoomend', updateCityLabels);
+  updateCityLabels();
+
+  // UGA Law marker
+  const ugaLaw = L.marker([33.9480, -83.3773], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div class="uga-label">UGA School of Law</div>',
+      iconSize: null,
+      iconAnchor: [60, 15],
+    })
+  }).addTo(map);
+  ugaLaw.bindPopup(`
+    <div class="info-popup">
+      <h3>UGA School of Law</h3>
+      <div class="row"><strong>Address:</strong> 225 Herty Drive, Athens, GA 30602</div>
+      <div class="row"><strong>911 Transport:</strong> National EMS (Priority Ambulance)</div>
+      <div class="row"><strong>First Response:</strong> Athens-Clarke County Fire Rescue</div>
+      <div class="row"><strong>Fire District:</strong> Station area visible on map</div>
+    </div>
+  `);
+
+  // Also add a circle marker for UGA Law that's always visible
+  L.circleMarker([33.9480, -83.3773], {
+    radius: 6, fillColor: '#ba0c2f', color: '#fff', weight: 2, fillOpacity: 1
+  }).addTo(map);
+
+  renderLegend(cc);
+  setupSearch(cc);
+});
+
+// Zoom buttons
+document.querySelectorAll('.zoom-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    map.setView([+btn.dataset.lat, +btn.dataset.lng], +btn.dataset.z);
+  });
+});
+
+function renderLegend(cc) {
+  const legend = document.getElementById('legend');
+  let html = '';
+
+  // Athens fire stations
+  html += '<div class="legend-section">Athens-Clarke Fire Stations (zoom in)</div>';
+  for (let i = 1; i <= 10; i++) {
+    const color = STATION_COLORS[String(i)];
+    if (color) {
+      html += `<div class="legend-item"><div class="legend-swatch" style="background:${color}"></div><div><span class="legend-label">Station ${i}</span></div></div>`;
+    }
+  }
+
+  // Athens area counties
+  html += '<div class="legend-section">Athens Area 911 Transport</div>';
+  const athensInfo = {
+    'Clarke': 'National EMS (Priority Ambulance)',
+    'Oconee': 'National EMS (Priority Ambulance)',
+    'Morgan': 'National EMS (Priority Ambulance)',
+    'Oglethorpe': 'Oglethorpe County EMS',
+    'Madison': 'Madison County EMS',
+    'Jackson': 'Jackson County EMS',
+    'Barrow': 'Barrow County Fire/EMS',
+    'Walton': 'Walton County EMS',
+    'Greene': 'Greene County EMS',
+    'Elbert': 'Elbert County EMS',
+  };
+  for (const [county, agency] of Object.entries(athensInfo)) {
+    const info = cc[county];
+    const color = info ? TYPE_COLORS[info.type] : '#95a5a6';
+    html += `<div class="legend-item" data-county="${county}">
+      <div class="legend-swatch" style="background:${color}"></div>
+      <div><span class="legend-label">${county}</span> <span class="legend-sub">${agency}</span></div>
+    </div>`;
+  }
+
+  // Provider types
+  html += '<div class="legend-section">Provider Types (statewide)</div>';
+  html += '<div class="legend-item"><div class="legend-swatch" style="background:#1abc9c"></div><div>County EMS (Third Service)</div></div>';
+  html += '<div class="legend-item"><div class="legend-swatch" style="background:#e74c3c"></div><div>Fire Department</div></div>';
+  html += '<div class="legend-item"><div class="legend-swatch" style="background:#f39c12"></div><div>Private (AMR, Priority, etc.)</div></div>';
+  html += '<div class="legend-item"><div class="legend-swatch" style="background:#3498db"></div><div>Hospital-Based (Grady, etc.)</div></div>';
+
+  // Major statewide agencies
+  html += '<div class="legend-section">Major Statewide Providers</div>';
+  const majors = [
+    { name: 'Grady EMS', sub: 'Atlanta + 17 rural counties', color: '#3498db' },
+    { name: 'Priority Ambulance', sub: 'National/Central/Puckett/Angel ~20 counties', color: '#f39c12' },
+    { name: 'AMR', sub: 'DeKalb, N. Fulton, Troup, Coweta', color: '#e67e22' },
+    { name: 'MetroAtlanta Ambulance', sub: 'Cobb, Bartow, Paulding', color: '#d35400' },
+    { name: 'Gwinnett County Fire', sub: 'Gwinnett County', color: '#e74c3c' },
+  ];
+  majors.forEach(m => {
+    html += `<div class="legend-item"><div class="legend-swatch" style="background:${m.color}"></div>
+      <div><span class="legend-label">${m.name}</span> <span class="legend-sub">${m.sub}</span></div></div>`;
+  });
+
+  // Symbols
+  html += '<div class="legend-section">Symbols</div>';
+  html += '<div class="legend-item"><div style="width:14px;height:14px;border-radius:50%;background:#ba0c2f;border:2px solid #fff;flex-shrink:0"></div><div>UGA School of Law</div></div>';
+  html += '<div class="legend-item"><div style="width:14px;height:3px;background:#f1c40f;flex-shrink:0;border:1px dashed #f1c40f"></div><div>Athens-Clarke County limits</div></div>';
+
+  legend.innerHTML = html;
+
+  legend.querySelectorAll('.legend-item[data-county]').forEach(item => {
+    item.addEventListener('click', () => {
+      const lyr = countyLyrs[item.dataset.county];
+      if (lyr) { map.fitBounds(lyr.getBounds().pad(0.2)); lyr.getLayers()[0].openPopup(); }
+    });
+  });
+}
+
+function setupSearch(cc) {
+  document.getElementById('search').addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    if (q.length < 2) return;
+    for (const [name, lyr] of Object.entries(countyLyrs)) {
+      const info = cc[name];
+      if (name.toLowerCase().includes(q) || (info && info.primary_provider.toLowerCase().includes(q))) {
+        map.fitBounds(lyr.getBounds().pad(0.3));
+        lyr.getLayers()[0].openPopup();
+        return;
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

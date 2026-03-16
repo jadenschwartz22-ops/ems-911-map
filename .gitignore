@@ -1,0 +1,20 @@
+# Raw data files (too large for git, simplified versions are used)
+data/co-special-districts.geojson
+data/co-all-districts.geojson
+data/co-fire-districts.geojson
+data/co-ems-districts.geojson
+data/co-ems-agencies-points.geojson
+data/ga-counties.geojson
+data/ga-places.geojson
+data/ga-state.geojson
+data/athens-fire-districts.geojson
+data/co-places.geojson
+data/co-counties.geojson
+
+# Old files
+data/boundaries.geojson
+data/counties.geojson
+data/denver-metro.json
+data/co-place-county-map.json
+
+.DS_Store

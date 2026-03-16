@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorado 911 EMS Coverage Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+#map { height: 100vh; width: 100%; }
+.sidebar {
+  position: absolute; top: 10px; right: 10px; z-index: 1000;
+  background: #fff; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  width: 340px; max-height: calc(100vh - 20px); overflow-y: auto;
+}
+.sidebar h2 { padding: 14px 16px 6px; font-size: 16px; }
+.sidebar .subtitle { padding: 0 16px 12px; font-size: 12px; color: #888; border-bottom: 1px solid #eee; }
+.search-bar { padding: 8px 16px; border-bottom: 1px solid #eee; }
+.search-bar input {
+  width: 100%; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none;
+}
+.nav-links { padding: 8px 16px; border-bottom: 1px solid #eee; font-size: 12px; }
+.nav-links a { color: #3498db; text-decoration: none; margin-right: 12px; }
+.nav-links a.active { font-weight: 600; color: #333; }
+.zoom-btns { padding: 8px 16px; border-bottom: 1px solid #eee; display: flex; gap: 6px; flex-wrap: wrap; }
+.zoom-btn {
+  padding: 4px 10px; border: 1px solid #ddd; border-radius: 4px;
+  background: #fff; font-size: 11px; cursor: pointer;
+}
+.zoom-btn:hover { background: #f0f0f0; }
+.legend { padding: 10px 16px; }
+.legend-section { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin: 10px 0 4px; }
+.legend-item { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; font-size: 12px; border-radius: 3px; }
+.legend-item:hover { background: #f5f5f5; }
+.legend-swatch { width: 14px; height: 10px; border-radius: 2px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1); }
+.legend-label { font-weight: 500; font-size: 12px; }
+.legend-sub { font-size: 10px; color: #999; }
+.footer { padding: 10px 16px; font-size: 10px; color: #aaa; border-top: 1px solid #eee; line-height: 1.4; }
+.district-label span {
+  font-size: 9px; font-weight: 600; color: #fff; white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px #000; pointer-events: none;
+}
+.info-popup h3 { margin: 0 0 6px; font-size: 14px; }
+.info-popup .row { font-size: 12px; color: #444; margin-bottom: 3px; }
+.info-popup .row strong { color: #222; }
+.info-popup .notes { font-size: 11px; color: #666; margin-top: 6px; font-style: italic; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="sidebar">
+  <h2>Colorado 911 EMS Coverage</h2>
+  <div class="subtitle">Real fire & EMS district boundaries. 267 districts.</div>
+  <div class="nav-links">
+    <a href="index.html">US Map</a>
+    <a href="colorado.html" class="active">Colorado</a>
+    <a href="georgia.html">Georgia</a>
+    <a href="contribute.html" style="color:#e67e22">Report Error</a>
+  </div>
+  <div class="zoom-btns">
+    <button class="zoom-btn" data-lat="39.72" data-lng="-104.95" data-z="11">Denver Metro</button>
+    <button class="zoom-btn" data-lat="38.85" data-lng="-104.82" data-z="11">CO Springs</button>
+    <button class="zoom-btn" data-lat="40.55" data-lng="-105.07" data-z="11">Fort Collins</button>
+    <button class="zoom-btn" data-lat="39.55" data-lng="-104.88" data-z="11">South Metro</button>
+    <button class="zoom-btn" data-lat="39.0" data-lng="-105.5" data-z="7">Statewide</button>
+  </div>
+  <div class="search-bar"><input type="text" id="search" placeholder="Search district name..."></div>
+  <div class="legend" id="legend"></div>
+  <div class="footer">
+    Fire district boundaries from CO DOLA. Municipal FD boundaries from Census TIGER.
+    Ambulance districts from CO Special Districts. 243 fire + 10 ambulance + 14 municipal = 267.
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const DISTRICT_INFO = {
+  'Denver Fire Department / Denver Health Paramedics': { transport: 'Denver Health Paramedics', color: '#2980b9', notes: 'Third service. 200 medics, 100k+ calls/yr.' },
+  'Aurora Fire Rescue / Falck Rocky Mountain': { transport: 'Falck Rocky Mountain', color: '#e67e22', notes: 'Falck exclusive 911 transport since 2015.' },
+  'South Metro Fire Rescue Fire Protection District': { transport: 'South Metro Fire Rescue', color: '#c0392b', notes: 'Largest fire-based EMS in CO. ~300 sq mi.' },
+  'West Metro Fire Protection District': { transport: 'West Metro Fire Rescue', color: '#8e44ad', notes: '130 sq mi, ~300k residents.' },
+  'North Metro Fire Rescue District': { transport: 'North Metro Fire Rescue', color: '#1abc9c', notes: '~60 sq mi, 125k residents.' },
+  'Arvada Fire Protection District': { transport: 'Arvada Fire (own transport since 2013)', color: '#d35400' },
+  'Thornton Fire Department': { transport: 'Thornton Fire Department', color: '#2ecc71' },
+  'Westminster Fire Department': { transport: 'Westminster Fire Department', color: '#27ae60' },
+  'Federal Heights Fire Department': { transport: 'Federal Heights Fire Dept', color: '#16a085' },
+  'Castle Rock Fire & Rescue': { transport: 'Castle Rock Fire & Rescue', color: '#a93226' },
+  'South Adams County Fire Protection District': { transport: 'South Adams FPD / Platte Valley Ambulance', color: '#566573' },
+  'Greater Brighton Fire Protection District': { transport: 'Brighton Fire Rescue', color: '#138d75' },
+  'Adams County Fire Protection District': { transport: 'Adams County Fire Rescue', color: '#7f8c8d' },
+  'Mountain View Fire Protection District': { transport: 'Mountain View Fire Rescue', color: '#0b5345' },
+  'Evergreen Fire Protection District': { transport: 'Evergreen Fire Rescue', color: '#7b241c' },
+  'Elk Creek Fire Protection District': { transport: 'Elk Creek FPD', color: '#6c3483' },
+  'Foothills Fire Protection District': { transport: 'Foothills FPD', color: '#884ea0' },
+  'Conifer Fire Protection District': { transport: 'Conifer FPD (Inter-Canyon)', color: '#7d3c98' },
+  'Boulder Fire / Falck Rocky Mountain': { transport: 'Falck Rocky Mountain', color: '#e67e22' },
+  'Boulder Rural Fire Protection District': { transport: 'Boulder Rural Fire Rescue', color: '#ca6f1e' },
+  'Longmont Fire / AMR': { transport: 'AMR / Longmont Fire', color: '#f4d03f' },
+  'Poudre Fire Authority / UCHealth EMS': { transport: 'UCHealth EMS', color: '#17a589' },
+  'Loveland Fire / Thompson Valley EMS': { transport: 'Thompson Valley EMS', color: '#148f77' },
+  'Greeley Fire / UCHealth EMS': { transport: 'UCHealth EMS', color: '#117a65' },
+  'Berthoud Fire Protection District': { transport: 'Thompson Valley EMS', color: '#148f77' },
+  'Frederick-Firestone Fire Protection District': { transport: 'Frederick-Firestone FPD', color: '#b03a2e' },
+  'Colorado Springs FD / AMR': { transport: 'AMR Colorado Springs', color: '#f1c40f' },
+  'Pueblo FD / AMR Pueblo': { transport: 'AMR Pueblo', color: '#d4ac0d' },
+  'Eagle River Fire Protection District': { transport: 'Eagle County Paramedic Services', color: '#0e6655' },
+  'Summit Fire & EMS Authority': { transport: 'Summit Fire & EMS', color: '#943126' },
+  'Red, White and Blue Fire Protection District': { transport: 'Red White & Blue FPD', color: '#a93226' },
+  'Aspen Fire Protection District': { transport: 'Aspen Ambulance District', color: '#117a65' },
+  'Durango Fire Protection District': { transport: 'Durango Fire & Rescue', color: '#b03a2e' },
+  'Steamboat Springs Area Fire Protection District': { transport: 'Steamboat Springs AFPD', color: '#922b21' },
+  'Carbondale & Rural Fire Protection District': { transport: 'Carbondale & Rural FPD', color: '#a93226' },
+  'Glenwood Springs Fire Protection District': { transport: 'Glenwood Springs FPD', color: '#cb4335' },
+  'Montrose Fire Protection District': { transport: 'Montrose FPD', color: '#cb4335' },
+  'Cortez Fire Protection District': { transport: 'Cortez Fire & Rescue', color: '#b03a2e' },
+  'Telluride Fire Protection District': { transport: 'Telluride FPD EMS', color: '#922b21' },
+  'Rifle Fire Protection District': { transport: 'Rifle FPD', color: '#cb4335' },
+  'Craig Rural Fire Protection District': { transport: 'Craig Fire / TMH EMS', color: '#7f8c8d' },
+  'Dove Creek Ambulance District': { transport: 'Dove Creek AD', color: '#117a65' },
+  'Ute Pass Regional Health Service District': { transport: 'Ute Pass Regional Health', color: '#148f77' },
+  'Alamosa County Ambulance District': { transport: 'Alamosa County Ambulance', color: '#0e6655' },
+  'North Fork Ambulance Health Service District': { transport: 'North Fork EMS', color: '#117a65' },
+  'Highland Rescue Team Ambulance District': { transport: 'Highland Rescue Team', color: '#1a5276' },
+  'South Park Ambulance District': { transport: 'South Park Ambulance District', color: '#117864' },
+  'Arkansas Valley Ambulance District': { transport: 'Arkansas Valley AD', color: '#148f77' },
+  'Trinidad Ambulance District': { transport: 'Trinidad Ambulance District', color: '#117a65' },
+  'Delta County Ambulance District': { transport: 'Delta County AD', color: '#0e6655' },
+};
+
+function getDistrictColor(name, source) {
+  if (DISTRICT_INFO[name]) return DISTRICT_INFO[name].color;
+  if (source === 'ems_district') return '#1abc9c';
+  if (source === 'municipal') return '#3498db';
+  const palette = ['#c0392b','#e74c3c','#d35400','#e67e22','#f39c12','#27ae60','#2ecc71',
+    '#1abc9c','#16a085','#2980b9','#3498db','#8e44ad','#9b59b6','#7f8c8d','#2c3e50'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
+  return palette[Math.abs(hash) % palette.length];
+}
+
+const map = L.map('map').setView([39.72, -104.95], 10);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+}).addTo(map);
+
+let districtLyrs = {};
+const labelLayerGroup = L.layerGroup();
+
+fetch('data/co-all-districts-simple.geojson')
+  .then(r => r.json())
+  .then(data => {
+    fetch('data/co-state.geojson').then(r => r.json()).then(state => {
+      L.geoJSON(state, { style: { fillColor: 'transparent', fillOpacity: 0, color: '#fff', weight: 1.5, opacity: 0.2 } }).addTo(map);
+    });
+
+    const TYPE_LABELS = { fire_based: 'Fire Dept', third_service: 'Third Service', private: 'Private', mixed: 'Multiple' };
+
+    data.features.forEach(f => {
+      const name = f.properties.name;
+      const source = f.properties.source;
+      const info = DISTRICT_INFO[name];
+      const color = getDistrictColor(name, source);
+      const transport = info ? info.transport : name;
+      const isAmbulance = source === 'ems_district';
+
+      const lyr = L.geoJSON(f, {
+        style: {
+          fillColor: color, fillOpacity: 0.5,
+          color: isAmbulance ? '#fff' : '#333', weight: isAmbulance ? 2 : 1,
+          opacity: 0.6, dashArray: isAmbulance ? '6 3' : null,
+        }
+      }).addTo(map);
+
+      const typeLabel = source === 'fire_district' ? 'Fire Protection District' :
+                        source === 'ems_district' ? 'Ambulance/EMS District' : 'Municipal Fire Department';
+
+      lyr.bindPopup(`<div class="info-popup"><h3>${name}</h3>
+        <div class="row"><strong>911 Transport:</strong> ${transport}</div>
+        <div class="row"><strong>Boundary Type:</strong> ${typeLabel}</div>
+        ${info && info.notes ? `<div class="notes">${info.notes}</div>` : ''}</div>`);
+
+      lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.75, weight: 2.5 }); });
+      lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.5, weight: isAmbulance ? 2 : 1 }); });
+      districtLyrs[name] = lyr;
+
+      const bounds = lyr.getBounds();
+      const shortName = name.replace(/ Fire Protection District$/, '').replace(/ Fire Department.*$/, '')
+        .replace(/ Ambulance District$/, ' AD').replace(/ Regional Health Service District$/, '')
+        .replace(/ Ambulance Health Service District$/, ' EMS').replace(/ Fire Rescue.*$/, ' FR')
+        .replace(/ Metropolitan District$/, ' Metro');
+      L.marker(bounds.getCenter(), {
+        icon: L.divIcon({ className: 'district-label', html: `<span>${shortName}</span>`, iconSize: null })
+      }).addTo(labelLayerGroup);
+    });
+
+    function updateLabels() {
+      if (map.getZoom() >= 10) { if (!map.hasLayer(labelLayerGroup)) labelLayerGroup.addTo(map); }
+      else { if (map.hasLayer(labelLayerGroup)) map.removeLayer(labelLayerGroup); }
+    }
+    map.on('zoomend', updateLabels);
+    updateLabels();
+    renderLegend();
+    setupSearch();
+  });
+
+document.querySelectorAll('.zoom-btn').forEach(btn => {
+  btn.addEventListener('click', () => map.setView([+btn.dataset.lat, +btn.dataset.lng], +btn.dataset.z));
+});
+
+function renderLegend() {
+  const legend = document.getElementById('legend');
+  const sections = {
+    'Denver Metro': [
+      'Denver Fire Department / Denver Health Paramedics', 'South Metro Fire Rescue Fire Protection District',
+      'West Metro Fire Protection District', 'Aurora Fire Rescue / Falck Rocky Mountain',
+      'North Metro Fire Rescue District', 'Arvada Fire Protection District',
+      'Thornton Fire Department', 'Westminster Fire Department', 'Castle Rock Fire & Rescue',
+      'South Adams County Fire Protection District', 'Greater Brighton Fire Protection District',
+      'Evergreen Fire Protection District',
+    ],
+    'Northern CO': ['Poudre Fire Authority / UCHealth EMS', 'Loveland Fire / Thompson Valley EMS', 'Greeley Fire / UCHealth EMS', 'Longmont Fire / AMR'],
+    'CO Springs / Pueblo': ['Colorado Springs FD / AMR', 'Pueblo FD / AMR Pueblo'],
+    'Mountains': ['Eagle River Fire Protection District', 'Summit Fire & EMS Authority', 'Durango Fire Protection District', 'Steamboat Springs Area Fire Protection District', 'Aspen Fire Protection District'],
+    'EMS/Ambulance Districts': ['Highland Rescue Team Ambulance District', 'South Park Ambulance District', 'Ute Pass Regional Health Service District', 'Delta County Ambulance District', 'Trinidad Ambulance District'],
+  };
+  let html = '';
+  for (const [section, names] of Object.entries(sections)) {
+    html += `<div class="legend-section">${section}</div>`;
+    names.forEach(name => {
+      const info = DISTRICT_INFO[name];
+      if (!info) return;
+      html += `<div class="legend-item" data-name="${name}"><div class="legend-swatch" style="background:${info.color}"></div><div><span class="legend-label">${info.transport}</span></div></div>`;
+    });
+  }
+  html += `<div class="legend-section">Boundary Types</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#e74c3c"></div><div>Fire Protection District</div></div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#1abc9c;border-style:dashed"></div><div>Ambulance/EMS District (dashed)</div></div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#3498db"></div><div>Municipal FD (city limits)</div></div>`;
+  legend.innerHTML = html;
+  legend.querySelectorAll('.legend-item[data-name]').forEach(item => {
+    item.addEventListener('click', () => {
+      const lyr = districtLyrs[item.dataset.name];
+      if (lyr) { map.fitBounds(lyr.getBounds().pad(0.2)); lyr.getLayers()[0].openPopup(); }
+    });
+  });
+}
+
+function setupSearch() {
+  document.getElementById('search').addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    if (q.length < 2) return;
+    for (const [name, lyr] of Object.entries(districtLyrs)) {
+      const info = DISTRICT_INFO[name];
+      const transport = info ? info.transport.toLowerCase() : '';
+      if (name.toLowerCase().includes(q) || transport.includes(q)) {
+        map.fitBounds(lyr.getBounds().pad(0.3)); lyr.getLayers()[0].openPopup(); return;
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
