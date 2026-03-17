@@ -221,7 +221,11 @@ function agencyColor(name) {
   return PALETTE[Math.abs(hash) % PALETTE.length];
 }
 
-const map = L.map('map').setView(S.center, S.zoom);
+const map = L.map('map', {
+  maxBounds: [[15, -180], [72, -50]],
+  maxBoundsViscosity: 1.0,
+  minZoom: 3,
+}).setView(S.center, S.zoom);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
 }).addTo(map);

@@ -150,7 +150,13 @@ const COMING_SOON = [
   'North Carolina', 'Arizona', 'Tennessee', 'Virginia',
 ];
 
-const map = L.map('map', { zoomControl: false }).setView([39.5, -98.5], 4);
+const map = L.map('map', {
+  zoomControl: false,
+  maxBounds: [[15, -180], [72, -50]],
+  maxBoundsViscosity: 1.0,
+  minZoom: 3,
+  worldCopyJump: false,
+}).setView([39.5, -98.5], 4);
 
 L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
