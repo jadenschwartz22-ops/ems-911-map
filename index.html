@@ -63,7 +63,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </div>
 
 <div class="sidebar">
-  <h3>States</h3>
+  <div style="padding:10px 16px;border-bottom:1px solid #30363d">
+    <input type="text" id="city-search" placeholder="Search city (e.g. Atlanta, Denver, Minneapolis...)"
+      style="width:100%;padding:8px 12px;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:13px;outline:none">
+    <div id="search-results" style="margin-top:6px;font-size:12px"></div>
+  </div>
+  <h3 style="padding:10px 16px 4px;font-size:13px">States</h3>
   <ul class="state-list" id="state-list"></ul>
   <div class="legend-box">
     <h4>Map Colors</h4>
@@ -160,7 +165,8 @@ const map = L.map('map', {
 
 L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+// Dark basemap without labels
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
 }).addTo(map);
 
@@ -229,9 +235,88 @@ fetch('data/us-states.geojson')
     document.getElementById('stats').textContent =
       `${liveStates} states mapped | ${totalAgencies} agencies | ${totalCounties} counties | 50 states to go`;
 
+    // Major city labels + CARTO labels on top
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18, pane: 'overlayPane'
+    }).addTo(map);
+
     // State list
     renderStateList();
+    setupCitySearch();
   });
+
+// Major US cities with coords and state abbreviation
+const CITIES = [
+  ['New York','NY',40.71,-74.01],['Los Angeles','CA',34.05,-118.24],['Chicago','IL',41.88,-87.63],
+  ['Houston','TX',29.76,-95.37],['Phoenix','AZ',33.45,-112.07],['Philadelphia','PA',39.95,-75.17],
+  ['San Antonio','TX',29.42,-98.49],['San Diego','CA',32.72,-117.16],['Dallas','TX',32.78,-96.80],
+  ['San Jose','CA',37.34,-121.89],['Austin','TX',30.27,-97.74],['Jacksonville','FL',30.33,-81.66],
+  ['Fort Worth','TX',32.76,-97.33],['Columbus','OH',39.96,-82.99],['Charlotte','NC',35.23,-80.84],
+  ['Indianapolis','IN',39.77,-86.16],['San Francisco','CA',37.77,-122.42],['Seattle','WA',47.61,-122.33],
+  ['Denver','CO',39.74,-104.99],['Nashville','TN',36.16,-86.78],['Oklahoma City','OK',35.47,-97.52],
+  ['Portland','OR',45.52,-122.67],['Las Vegas','NV',36.17,-115.14],['Memphis','TN',35.15,-90.05],
+  ['Louisville','KY',38.25,-85.76],['Baltimore','MD',39.29,-76.61],['Milwaukee','WI',43.04,-87.91],
+  ['Albuquerque','NM',35.08,-106.65],['Tucson','AZ',32.22,-110.97],['Fresno','CA',36.74,-119.77],
+  ['Sacramento','CA',38.58,-121.49],['Kansas City','MO',39.10,-94.58],['Mesa','AZ',33.42,-111.83],
+  ['Atlanta','GA',33.75,-84.39],['Omaha','NE',41.26,-95.94],['Colorado Springs','CO',38.83,-104.82],
+  ['Raleigh','NC',35.78,-78.64],['Long Beach','CA',33.77,-118.19],['Virginia Beach','VA',36.85,-75.98],
+  ['Miami','FL',25.76,-80.19],['Minneapolis','MN',44.98,-93.27],['Tampa','FL',27.95,-82.46],
+  ['New Orleans','LA',29.95,-90.07],['Arlington','TX',32.74,-97.11],['Cleveland','OH',41.50,-81.69],
+  ['Wichita','KS',37.69,-97.34],['Boise','ID',43.62,-116.21],['St. Louis','MO',38.63,-90.20],
+  ['Pittsburgh','PA',40.44,-79.99],['Cincinnati','OH',39.10,-84.51],['St. Paul','MN',44.95,-93.09],
+  ['Anchorage','AK',61.22,-149.90],['Honolulu','HI',21.31,-157.86],['Detroit','MI',42.33,-83.05],
+  ['Madison','WI',43.07,-89.40],['Salt Lake City','UT',40.76,-111.89],['Rochester','MN',44.02,-92.47],
+  ['Duluth','MN',46.79,-92.10],['Athens','GA',33.96,-83.38],['Savannah','GA',32.08,-81.09],
+  ['Augusta','GA',33.47,-81.97],['Macon','GA',32.84,-83.63],['Boulder','CO',40.01,-105.27],
+  ['Fort Collins','CO',40.59,-105.08],['Aurora','CO',39.73,-104.83],['Lakewood','CO',39.70,-105.08],
+  ['Arvada','CO',39.80,-105.09],['Spokane','WA',47.66,-117.43],['Tacoma','WA',47.25,-122.44],
+  ['Eugene','OR',44.05,-123.09],['Salem','OR',44.94,-123.04],['Topeka','KS',39.05,-95.68],
+  ['Tulsa','OK',36.15,-95.99],['Lexington','KY',38.04,-84.50],['Lincoln','NE',40.81,-96.70],
+  ['Burlington','VT',44.48,-73.21],['Bangor','ME',44.80,-68.77],['Portland','ME',43.66,-70.26],
+  ['Fargo','ND',46.88,-96.79],['Bismarck','ND',46.81,-100.78],['Grand Forks','ND',47.93,-97.03],
+];
+
+// State abbrev to state.html key
+const ABBREV_TO_KEY = {
+  CO:'co',GA:'ga',MN:'mn',ND:'nd',UT:'ut',IN:'in',KY:'ky',NE:'ne',OR:'or',
+  VT:'vt',KS:'ks',ME:'me',WA:'wa',OK:'ok',MO:'mo',WI:'wi',AZ:'az',ID:'id',
+};
+
+function setupCitySearch() {
+  const input = document.getElementById('city-search');
+  const results = document.getElementById('search-results');
+
+  input.addEventListener('input', () => {
+    const q = input.value.toLowerCase().trim();
+    if (q.length < 2) { results.innerHTML = ''; return; }
+
+    const matches = CITIES.filter(c => c[0].toLowerCase().includes(q)).slice(0, 6);
+    if (!matches.length) { results.innerHTML = '<span style="color:#8b949e">No results</span>'; return; }
+
+    results.innerHTML = matches.map(c => {
+      const key = ABBREV_TO_KEY[c[1]];
+      const hasData = !!key;
+      return `<div style="padding:4px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center"
+        onclick="${hasData ? `window.location='state.html?s=${key}'` : ''}"
+        ${!hasData ? 'style="padding:4px 0;opacity:0.4;cursor:default"' : ''}>
+        <span style="color:#c9d1d9">${c[0]}, ${c[1]}</span>
+        ${hasData ? '<span style="color:#3fb950;font-size:10px">View coverage &#8594;</span>' : '<span style="color:#8b949e;font-size:10px">coming soon</span>'}
+      </div>`;
+    }).join('');
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const q = input.value.toLowerCase().trim();
+      const match = CITIES.find(c => c[0].toLowerCase().includes(q));
+      if (match) {
+        const key = ABBREV_TO_KEY[match[1]];
+        if (key) window.location = `state.html?s=${key}`;
+        else map.setView([match[2], match[3]], 8);
+      }
+    }
+  });
+}
 
 function renderStateList() {
   const list = document.getElementById('state-list');
