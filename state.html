@@ -36,9 +36,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   <div class="subtitle" id="subtitle"></div>
   <div class="nav-links">
     <a href="index.html">US Map</a>
-    <a href="colorado.html">CO</a>
-    <a href="georgia.html">GA</a>
-    <a href="minnesota.html">MN</a>
+    <a href="state.html?s=co">CO</a>
+    <a href="state.html?s=ga">GA</a>
+    <a href="state.html?s=mn">MN</a>
     <a href="state.html?s=nd">ND</a>
     <a href="state.html?s=ut">UT</a>
     <a href="state.html?s=in">IN</a>
@@ -63,6 +63,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const STATES = {
+  co: {
+    name: 'Colorado', center: [39.0, -105.5], zoom: 7,
+    emsFile: 'data/co-ems-simple.geojson', stateFile: 'data/co-state-simple.geojson',
+    nameField: 'name', features: 267, agencies: 267,
+    source: 'CO DOLA fire districts + CDPHE ambulance districts + municipal FDs', authoritative: false,
+    notes: 'Fire district boundaries - may not reflect 911 transport provider. Best available until CO publishes NG911 EMS data.',
+  },
+  ga: {
+    name: 'Georgia', center: [32.7, -83.5], zoom: 7,
+    emsFile: 'data/ga-ems-simple.geojson', stateFile: 'data/ga-state-simple.geojson',
+    nameField: 'name', features: 159, agencies: 134,
+    source: 'GA DPH + GTCNC EMS grant data + agency research', authoritative: false,
+    notes: 'County-level data. GA NG911 EMS layer exists but is empty as of March 2026.',
+  },
+  mn: {
+    name: 'Minnesota', center: [46.3, -94.8], zoom: 7,
+    emsFile: 'data/mn-ems-areas-simple.geojson', stateFile: 'data/mn-state-simple.geojson',
+    nameField: 'AmbServNam', features: 478, agencies: 249,
+    source: 'MN EMSRB - legally authoritative PSA boundaries', authoritative: true,
+    notes: 'Gold standard. Legally designated Primary Service Areas.',
+    extraFields: ['ServLevel', 'EMSRegion', 'County', 'AmbLiceNum'],
+  },
   nd: {
     name: 'North Dakota', center: [47.5, -100.5], zoom: 7,
     emsFile: 'data/nd-ems-simple.geojson', stateFile: 'data/nd-state-simple.geojson',
@@ -224,11 +246,24 @@ Promise.all([
       style: { fillColor: color, fillOpacity: 0.5, color: '#fff', weight: 1, opacity: 0.6 }
     }).addTo(map);
 
+    // Build extra fields for popup
+    let extras = '';
+    if (S.extraFields) {
+      S.extraFields.forEach(field => {
+        const val = p[field];
+        if (val) extras += `<div class="row"><strong>${field.replace(/([A-Z])/g,' $1').trim()}:</strong> ${val}</div>`;
+      });
+    }
+    const distType = p.district_type || p.source || '';
+    if (distType) extras += `<div class="row"><strong>Type:</strong> ${distType}</div>`;
+
     lyr.bindPopup(`<div class="info-popup">
       <h3>${name}</h3>
       ${county ? `<div class="row"><strong>County:</strong> ${county}</div>` : ''}
       ${agencyId ? `<div class="row"><strong>Agency ID:</strong> ${agencyId}</div>` : ''}
-      <div class="row"><strong>Source:</strong> ${S.source}</div>
+      ${extras}
+      <div class="row" style="color:#999;font-size:11px"><strong>Source:</strong> ${S.source}</div>
+      ${!S.authoritative ? '<div class="row" style="color:#e67e22;font-size:11px">Unverified - may not reflect actual 911 transport</div>' : ''}
     </div>`);
 
     lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.75, weight: 2 }); });
@@ -248,6 +283,40 @@ Promise.all([
   }
   map.on('zoomend', updateLabels);
   updateLabels();
+
+  // Load HIFLD ambulance stations as city markers
+  fetch('data/hifld-ambulance-simple.geojson').then(r => r.json()).then(hifld => {
+    const stateAbbrevs = { 'Colorado':'CO','Georgia':'GA','Minnesota':'MN','North Dakota':'ND','Utah':'UT',
+      'Indiana':'IN','Kentucky':'KY','Nebraska':'NE','Oregon':'OR','Vermont':'VT','Kansas':'KS',
+      'Maine':'ME','Washington':'WA','Oklahoma':'OK','Missouri':'MO','Wisconsin':'WI','Arizona':'AZ','Idaho':'ID' };
+    const abbrev = stateAbbrevs[S.name] || '';
+    const stations = hifld.features.filter(f => f.properties.STATE === abbrev && f.geometry);
+    const cityGroup = L.layerGroup();
+    const seen = new Set();
+    stations.forEach(f => {
+      const city = f.properties.CITY || '';
+      const name = f.properties.NAME || '';
+      const coords = f.geometry.coordinates;
+      if (!city || !coords[0] || !coords[1]) return;
+      // One label per city
+      if (!seen.has(city)) {
+        seen.add(city);
+        L.marker([coords[1], coords[0]], {
+          icon: L.divIcon({ className: 'district-label', html: `<span style="font-size:8px;opacity:0.7">${city}</span>`, iconSize: null })
+        }).addTo(cityGroup);
+      }
+      // Station dot
+      L.circleMarker([coords[1], coords[0]], {
+        radius: 3, fillColor: '#fff', color: '#fff', weight: 0.5, fillOpacity: 0.5
+      }).bindPopup(`<div class="info-popup"><h3>${name}</h3><div class="row">${city}, ${abbrev}</div></div>`).addTo(cityGroup);
+    });
+    function updateCities() {
+      if (map.getZoom() >= 9) { if (!map.hasLayer(cityGroup)) cityGroup.addTo(map); }
+      else { if (map.hasLayer(cityGroup)) map.removeLayer(cityGroup); }
+    }
+    map.on('zoomend', updateCities);
+    updateCities();
+  }).catch(() => {});
 
   document.getElementById('search').addEventListener('input', function() {
     const q = this.value.toLowerCase().trim();
