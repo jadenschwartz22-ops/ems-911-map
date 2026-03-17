@@ -226,7 +226,8 @@ const map = L.map('map', {
   maxBoundsViscosity: 1.0,
   minZoom: 3,
 }).setView(S.center, S.zoom);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+// Dark base without labels
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
 }).addTo(map);
 
@@ -281,8 +282,14 @@ Promise.all([
     }).addTo(labelGroup);
   });
 
+  // City/town name labels on top of everything
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18, pane: 'overlayPane'
+  }).addTo(map);
+
+  // Agency labels only at high zoom
   function updateLabels() {
-    if (map.getZoom() >= 9) { if (!map.hasLayer(labelGroup)) labelGroup.addTo(map); }
+    if (map.getZoom() >= 12) { if (!map.hasLayer(labelGroup)) labelGroup.addTo(map); }
     else { if (map.hasLayer(labelGroup)) map.removeLayer(labelGroup); }
   }
   map.on('zoomend', updateLabels);
